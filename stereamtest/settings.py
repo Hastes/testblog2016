@@ -11,10 +11,10 @@ https://docs.djangoproject.com/en/1.10/ref/settings/
 """
 
 import os
-
+import dj_database_url
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
+PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
@@ -24,9 +24,6 @@ SECRET_KEY = 'r-$*m)zk3c-tjenrucg0p!6end1ez7x0uv$o!cz3ww7m#)8=p&'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-
-
-ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -121,12 +118,26 @@ ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_USERNAME_REQUIRED = False
 
+db_from_env = dj_database_url.config(conn_max_age=500)
+DATABASES['default'].update(db_from_env)
+
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
-STATICFILES_DIRS = (
-    os.path.join(BASE_DIR,"static"),
-)
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+# Allow all host headers
+ALLOWED_HOSTS = ['*']
+
+# Static files (CSS, JavaScript, Images)
+# https://docs.djangoproject.com/en/1.8/howto/static-files/
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'static_cdn')
 STATIC_URL = '/static/'
+
+# Extra places for collectstatic to find static files.
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'static'),
+)
 MEDIA_URL = '/media/'
-STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR)+'/stereamtest/','static_cdn')
 MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR)+'/stereamtest/','media_cdn')
