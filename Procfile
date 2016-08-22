@@ -1,1 +1,1 @@
-web: gunicorn testblog2016.wsgi --log-file -
+web: gunicorn stereamtest.wsgi --log-file -
