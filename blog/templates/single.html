@@ -1,0 +1,132 @@
+<!DOCTYPE HTML>
+<!--
+	Future Imperfect by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>{{ objects.title }} - Future Imperfect by HTML5 UP</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<!--[if lte IE 8]><script src="/static/assets/js/ie/html5shiv.js"></script><![endif]-->
+		<link rel="stylesheet" href="/static/assets/css/main.css" />
+        <script src="//vk.com/js/api/openapi.js?122" type="text/javascript"></script>
+		<!--[if lte IE 9]><link rel="stylesheet" href="/static/assets/css/ie9.css" /><![endif]-->
+		<!--[if lte IE 8]><link rel="stylesheet" href="/static/assets/css/ie8.css" /><![endif]-->
+	</head>
+	<body class="single">
+
+		<!-- Wrapper -->
+			<div id="wrapper">
+
+				<!-- Header -->
+					<header id="header">
+						<h1><a href="#">Future Imperfect</a></h1>
+						<nav class="links">
+							<ul>
+								<li><a href="#">Lorem</a></li>
+								<li><a href="#">Ipsum</a></li>
+								<li><a href="#">Feugiat</a></li>
+								<li><a href="#">Tempus</a></li>
+								<li><a href="#">Adipiscing</a></li>
+							</ul>
+						</nav>
+						<nav class="main">
+							<ul>
+								<li class="search">
+									<a class="fa-search" href="#search">Search</a>
+									<form id="search" method="get" action="#">
+										<input type="text" name="query" placeholder="Search" />
+									</form>
+								</li>
+								<li class="menu">
+									<a class="fa-bars" href="#menu">Menu</a>
+								</li>
+							</ul>
+						</nav>
+					</header>
+
+				<!-- Menu -->
+					<section id="menu">
+                         {% include 'side_menu.html' %}
+					</section>
+
+				<!-- Main -->
+					<div id="main">
+
+						<!-- Post -->
+							<article class="post">
+								<header>
+									<div class="title">
+										<h2><a href="#">{{ objects.title }}</a></h2>
+										<p>Lorem ipsum dolor amet nullam consequat etiam feugiat</p>
+									</div>
+									<div class="meta">
+                                        {{ objects.created_date }}
+										<a href="#" class="author"><span class="name">{{ objects.author }}</span><img src="/static/images/avatar.jpg" alt="" /></a>
+									</div>
+								</header>
+								<p>{{ objects.message|linebreaksbr}}</p>
+								<footer>
+									<ul class="stats">
+										<li><a href="#">НА ГЛАВНУЮ</a></li>
+										<li><a href="#" class="icon fa-heart">{{ objects.likes_post }}</a></li>
+										<li><a href="#" class="icon fa-comment">{{ comments.count }}</a></li>
+                                        <!-- Put this div tag to the place, where the Like block will be -->
+                                        <li><div id="{{ objects.id }}"></div>
+                                            <script type="text/javascript">
+                                                        VK.Widgets.Like("{{ objects.id }}", {redesign: 1, type: "full", height: 30});
+                                            </script></li>
+									</ul>
+								</footer>
+
+							</article>
+                            {% if comments.count != 0 %}
+                            <h2>&emsp; Комментарии:</h2>
+                            {% endif %}
+                        {% for com in comments %}
+
+                            <article class="post">
+
+                                <h3>{{ com.author }}<br><hr></h3>
+                                {{ com.message }}
+                            </article>
+                        {% endfor %}
+                            <form method="POST">{% csrf_token %}
+                            {{ form }}
+                                <input type="submit" value="Отправить" >
+                            </form>
+
+
+					</div>
+
+				<!-- Footer -->
+					<section id="footer">
+						<ul class="icons">
+							<li><a href="#" class="fa-twitter"><span class="label">Twitter</span></a></li>
+							<li><a href="#" class="fa-facebook"><span class="label">Facebook</span></a></li>
+							<li><a href="#" class="fa-instagram"><span class="label">Instagram</span></a></li>
+							<li><a href="#" class="fa-rss"><span class="label">RSS</span></a></li>
+							<li><a href="#" class="fa-envelope"><span class="label">Email</span></a></li>
+						</ul>
+						<p class="copyright">&copy; Untitled. Design: <a href="http://html5up.net">HTML5 UP</a>. Images: <a href="http://unsplash.com">Unsplash</a>.</p>
+					</section>
+
+			</div>
+
+		<!-- Scripts -->
+			<script src="/static/assets/js/jquery.min.js"></script>
+			<script src="/static/assets/js/skel.min.js"></script>
+			<script src="/static/assets/js/util.js"></script>
+			<!--[if lte IE 8]><script src="assets/js/ie/respond.min.js"></script><![endif]-->
+			<script src="/static/assets/js/main.js"></script>
+    <script type="text/javascript">
+          VK.init({
+            apiId: ВАШ_API,
+            onlyWidgets: true
+          });
+        </script>
+
+	</body>
+</html>

@@ -1,0 +1,65 @@
+<section>
+<form class="search" method="get" action="#">
+<input type="text" name="query" placeholder="Search" />
+</form>
+</section>
+
+
+{% if request.user.is_authenticated %}
+    <section>
+    <center><h2 class="center"><a href="" >{{ request.user.username }}</a></h2><br><div id="ip_get_user_side"></div></center>
+    <style>.center{
+        color: rgba(1, 68, 255, 0.48);
+        font-size: 158%;
+        margin: -20px;
+    }</style>
+    </section>
+{% endif %}
+
+
+{% if request.user.is_superuser %}
+    <section>
+    <h3><a href="/admin/" >Админ панель</a></h3>
+    <hr>
+    <h3><a href="/admin/" >Список пользователей</a></h3>
+    <hr>
+    <h3><a href="{% url 'created_post' %}" >Добавить статью</a></h3>
+    </section>
+    {% else %}
+        {% if request.user.is_authenticated %}
+            <section>
+            <!--                -->
+             </section>
+        {% endif %}
+
+{% endif %}
+
+
+{% if request.user.is_authenticated %};
+    <section>
+    <ul class="links">
+<li><a href="{% url 'logout' %}" class="button big fit">Выход</a></li>
+    </ul>
+        </section>
+{% else %}
+     <section>
+     <ul class="links">
+<li><a href="{% url 'login' %}" class="button big fit">Вход</a></li>
+<li><a href="{% url 'reg' %}" class="button big fit">Регистрация</a></li>
+    </ul>
+        </section>
+{% endif %}
+
+<script src="/static/assets/js/jquery.min.js"></script>
+<script>
+    $(document).ready(function (){
+        $.ajax({
+            url:'/get_ip/',
+            success: function(data){
+                $('#ip_get_user_side').html(data.get_ip)
+                console.log(data.get_ip)
+            }
+        })
+    })
+</script>
+

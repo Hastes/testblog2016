@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block content %}
+ 	<article class="post">
+        <header>
+            <div class="title">
+                <h2><a href="#">{{ objects.title }}</a></h2>
+                <p>Lorem ipsum dolor amet nullam consequat etiam feugiat</p>
+            </div>
+            <div class="meta">
+                <time class="published" datetime="2015-11-01">{{ objects.created_date }}</time>
+                <a href="#" class="author"><span class="name">{{ objects.author }}</span><div class="wow bounceInUp"><img src="images/avatar.jpg" alt="" /></a></div>
+            </div>
+        </header>
+        <span class="image featured"><img src="/static/images/pic01.jpg" alt="" /></span>
+        <p>{{ objects.message }} </p>
+        <footer>
+            <ul class="stats">
+                <li><a href="#" class="icon fa-heart">28</a></li>
+                <li><a href="#" class="icon fa-comment">128</a></li>
+            </ul>
+        </footer>
+        {% if comments.count > 0 %}
+            <hr>
+        {% for comment in comments %}
+        <p>{{ comment.message }}</p>
+        {% endfor %}
+    {% else %}
+    {% endif %}
+    </article>
+{% endblock %}

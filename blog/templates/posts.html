@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+
+
+
+{% block search_posts %}
+<li class="search">
+<a class="fa-search" href="#search">Search</a>
+<form id="search" method="GET" {% if request.GET.q %} class="visible" {% endif %}action="">
+<input type="text" name="q" placeholder="Search"  value="{{ request.GET.q }}" />
+</form>
+</li>
+{% endblock %}
+
+
+
+
+{% block menu %}
+{% for post in objects %}
+<!-- Links -->
+<section>
+    <ul class="links">
+        <li>
+            <a href="#">
+                <h3>{{ post.title }}</h3>
+                <p>Feugiat tempus veroeros dolor</p>
+            </a>
+        </li>
+    </ul>
+</section>
+{% endfor %}
+{% endblock %}
+
+
+{% block content %}
+    {% for post in objects %}
+<article class="post">
+    <header>
+        <div class="title">
+            <h2><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></h2>
+            <p>{{ post.about }}</p>
+        </div>
+        <div class="meta">
+            {{ post.created_date|date:'Y-m-d' }}<br>С момента публикации:<br>{{ post.created_date|timesince }}<br>
+            <a href="{{ post.get_absolute_url }}delete/" class="author"><span class="name">{{ post.author }}</span><img src="/static/images/av_undef.png" alt="" /></a>
+        </div>
+    </header>
+    {% if post.image %}
+        <a href="#" class="image featured"><img src="{{ post.image.url }}" alt="" /></a>
+    {% else %}
+   <a href="#" class="image featured"><img src="/static/images/cat.gif" alt="" /></a>
+    {% endif %}
+    <p>{{ post.message|truncatewords:100 }}</p>
+    <footer>
+        <ul class="actions">
+            <li><a href="{% url 'article' post.id %}" class="button big">Continue Reading</a></li>
+        </ul>
+        <ul class="stats">
+            <li><a id="like_id{{ post.id }}" onclick="postlike({{ post.id }})" class="icon fa-heart">{{ post.likes_post }}</a></li>
+            <li><a class="icon fa-comment">{{ post.get_count_com }}</a></li>
+        </ul>
+    </footer>
+</article>
+
+{% endfor %}
+{% endblock %}
+
+{% block pagination %}
+    <ul class="actions pagination">
+        {% if objects.has_other_pages %}
+            {% if objects.has_previous %}
+                <li><a href="{% url 'current_page' objects.previous_page_number %}" class="button big previous">Previous Page</a> </li>
+            {% else %}
+                <li><a href="" class="disabled button big previous">Previous Page</a></li>
+            {% endif %}
+            {% if objects.has_next %}
+                <li><a href="{% url 'current_page' objects.next_page_number %}" class="button big next">Next Page</a></li>
+            {% else %}
+                <li><a href="" class="disabled button big next">Next Page</a></li>
+            {% endif %}
+            {% else %}
+        {% endif %}
+    </ul>
+{% endblock %}
