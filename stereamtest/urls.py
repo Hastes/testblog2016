@@ -37,6 +37,7 @@ urlpatterns = [
     url(r'^created/post/$',views.created_post,name='created_post'),
     url(r'^messagelike/(\d+)/$', views.message_like,name="message_like"),
     url(r'^deleteallmessage/$',views.delete_message,name="del_mes"),
+    url(r'^user_profile/(?P<username>[\w-]+)/$',views.userprofile,name='userprofile'),
     url(r'^blog/',include("blog.API.urls",namespace='blog_API')),
     url(r'^get_ip/$',views.get_ip_user,name='get_ip_user'),
 ]

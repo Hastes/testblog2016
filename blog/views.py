@@ -32,12 +32,15 @@ def article(request, article_id=None):
     return render(request,'single.html',{'objects':objects,'comments':Comment.objects.filter(comment_post=article_id),'form':form})
 
 def created_post(request):
-    form = CreatePostForm(request.POST or None,request.FILES or None)
-    if form.is_valid():
-        instance = form.save(commit=False)
-        instance.author = request.user
-        instance.save()
-        return HttpResponseRedirect('/')
+    if request.user.is_staff or request.user.is_superuser:
+        form = CreatePostForm(request.POST or None,request.FILES or None)
+        if form.is_valid():
+            instance = form.save(commit=False)
+            instance.author = request.user
+            instance.save()
+            return HttpResponseRedirect('/')
+    else:
+        raise Http404
     return render(request,'created.html',{'form':form})
 
 def update_article(request, article_id=None):
@@ -69,9 +72,12 @@ def front(request,page_number=1):
     current_page = Paginator(objects,count_page)
     return render(request,'posts.html',{'objects':current_page.page(page_number),'comment_count':comment_count,'get_ip':get_ip(request)})
 
-
-
-
+def userprofile(request,username):
+    try:
+        user = User.objects.get(username=username)
+    except:
+        raise Http404
+    return render(request,'userprofile.html',{'user':user})
 
 def likepost(request, article_id):
     like = Post.objects.get(id=article_id)

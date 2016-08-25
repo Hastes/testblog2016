@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block myprof %}
+<section id="intro">
+    <a href="{{ request.build_absolute_uri }}" class="logo"><img src="/static/images/av_undef.png" alt="" /></a>
+    <header>
+        <h2>{{ user.username }}</h2>
+        <p>Ваше звание - <a href="">ноунейм</a></p>
+    </header>
+</section>
+{% endblock %}
