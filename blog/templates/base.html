@@ -207,30 +207,48 @@
 			<script src="/static/assets/js/jquery.min.js"></script>
 			<script src="/static/assets/js/skel.min.js"></script>
 			<script src="/static/assets/js/util.js"></script>
+            <script src="/static/WOW/dist/wow.min.js"></script>
 			<!--[if lte IE 8]><script src="assets/js/ie/respond.min.js"></script><![endif]-->
 			<script src="/static/assets/js/main.js"></script>
 
             <script type="text/javascript">
+                function add_rep_user(user_id){
+                    var btn = document.getElementById('btn_rep');
+                    $('#btn_rep').fadeOut();
+                    console.log(user_id)
+                  $.ajax({
+                      url:'/user_profile/'+user_id+'/add_rep/',
+                      cache: false,
+                      success: function(data){
+                          if(data === ''){
+                              window.location.href = "{% url 'reg' %}"
+                          }
+                          $("#rep_user").html(data);
+                      }
+                  })
+                  };
               function postlike(post_id){
                   var obj= document.getElementById('like_id'+post_id);
-                  var val = Number(obj.innerHTML);
-                  obj.style.cssText =   "pointer-events: none; ";
+                  obj.style.cssText =   "pointer-events: none;";
                   $("#like_id"+post_id).fadeOut();
                   $.ajax({
                       url:'/likepost/'+post_id,
                       cache: false,
-                      success: function(){
-                          $("#like_id"+post_id).html(val+1);
-                          obj.style.cssText =   "pointer-events: auto ";
+                      success: function(data){
+                          if(data === ''){
+                              window.location.href = "{% url 'reg' %}"
+                          }
+                          $("#like_id"+post_id).html(data);
+                          obj.style.cssText = "pointer-events: auto ";
                           $("#like_id"+post_id).fadeIn()
                       }
                   })
                   };
               </script>
-                 <script src="/static/WOW/dist/wow.min.js"></script>
               <script>
               new WOW().init();
               </script>
+
 
 	</body>
 </html>

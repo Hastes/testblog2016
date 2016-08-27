@@ -55,7 +55,7 @@
             <li><a href="{% url 'article' post.id %}" class="button big">Continue Reading</a></li>
         </ul>
         <ul class="stats">
-            <li><a id="like_id{{ post.id }}" onclick="postlike({{ post.id }})" class="icon fa-heart">{{ post.likes_post }}</a></li>
+            <li><a id="like_id{{ post.id }}" onclick="postlike({{ post.id }})" class="icon fa-heart">{{ post.get_count_lk }}</a></li>
             <li><a class="icon fa-comment">{{ post.get_count_com }}</a></li>
         </ul>
     </footer>

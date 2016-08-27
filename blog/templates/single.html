@@ -22,14 +22,10 @@
 
 				<!-- Header -->
 					<header id="header">
-						<h1><a href="#">Future Imperfect</a></h1>
+						<h1><a href="/">Future Imperfect</a></h1>
 						<nav class="links">
 							<ul>
-								<li><a href="#">Lorem</a></li>
-								<li><a href="#">Ipsum</a></li>
-								<li><a href="#">Feugiat</a></li>
-								<li><a href="#">Tempus</a></li>
-								<li><a href="#">Adipiscing</a></li>
+								<li><a href="/offtop/">ОФФТОП</a></li>
 							</ul>
 						</nav>
 						<nav class="main">
@@ -71,7 +67,7 @@
 								<footer>
 									<ul class="stats">
 										<li><a href="#">НА ГЛАВНУЮ</a></li>
-										<li><a href="#" class="icon fa-heart">{{ objects.likes_post }}</a></li>
+										<li><a href="#" class="icon fa-heart">{{ objects.get_count_lk }}</a></li>
 										<li><a href="#" class="icon fa-comment">{{ comments.count }}</a></li>
                                         <!-- Put this div tag to the place, where the Like block will be -->
                                         <li><div id="{{ objects.id }}"></div>

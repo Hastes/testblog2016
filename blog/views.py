@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse,HttpResponseRedirect,HttpRequest
-from .models import Post, Comment, Offtop_Comment
+from .models import Post, Comment, Offtop_Comment, Likes, UserProf
 from django.core.paginator import Paginator
 from ipware.ip import get_ip
 from  django.contrib.auth.forms import UserCreationForm,AuthenticationForm
@@ -8,7 +8,10 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib import auth
 from django.contrib.auth.middleware import get_user
 from django.contrib.auth.models import User
+from django.contrib.contenttypes.models import ContentType
+from django.core.exceptions import ObjectDoesNotExist
 from  django.core import serializers
+from django.contrib import sessions
 from django.http import Http404
 from blog.API.serializers import Offtop_CommentSerializer
 import json
@@ -70,20 +73,64 @@ def front(request,page_number=1):
     if search:
         objects = Post.objects.filter(title__icontains=search)
     current_page = Paginator(objects,count_page)
-    return render(request,'posts.html',{'objects':current_page.page(page_number),'comment_count':comment_count,'get_ip':get_ip(request)})
+    return render(request,'posts.html',{'objects':current_page.page(page_number),'comment_count':comment_count})
 
 def userprofile(request,username):
+    user = get_object_or_404(User,username=username)
+    UserProf.objects.update_or_create(user_key=auth.get_user(request))
+    user_inf = UserProf.objects.get(user_key=auth.get_user(request))
+    content_type = ContentType.objects.get_for_model(UserProf)
     try:
-        user = User.objects.get(username=username)
-    except:
-        raise Http404
-    return render(request,'userprofile.html',{'user':user})
+        like_generic = Likes.objects.get(content_type=content_type,user_id=request.user.id,object_id=user_inf.id)
+        visible_btn = False
+    except ObjectDoesNotExist:
+        visible_btn = True
+    return render(request,'userprofile.html',{'user':user,'user_inf':user_inf,'visible':visible_btn})
+
+def add_rep_user(request,id_user):
+    id_user = str(id_user)
+    if not request.user.is_authenticated:
+        return HttpResponse('')
+    content_type = ContentType.objects.get_for_model(UserProf)
+    try:
+        like_generic = Likes.objects.get(content_type=content_type,user_id=auth.get_user(request).id,object_id=id_user)
+        like_generic.delete()
+    except ObjectDoesNotExist:
+        like_generic = Likes.objects.create(content_type=content_type,
+                                            user_id=request.user.id,
+                                            object_id=id_user,
+                                            like=True
+                                            )
+    return HttpResponse(Likes.objects.filter(content_type=content_type,object_id=id_user).count())
+
+# def likepost(request, article_id):
+#     if not request.session.get('has_liked'+article_id, False):
+#         like_generic = Likes.objects.create(content_type=ContentType.objects.get_for_model(Post),user_id=request.user.id,object_id=article_id)
+#     if request.session.get('has_liked'+article_id, False):    #1 false  #2... true
+#         like_generic.count_likes -=1
+#         like_generic.save()
+#         del request.session['has_liked'+article_id]
+#     else:
+#         like_generic.count_likes +=1
+#         like_generic.save()
+#         request.session['has_liked'+article_id] = True
+#     return HttpResponse(like_generic.count_likes)
 
 def likepost(request, article_id):
-    like = Post.objects.get(id=article_id)
-    like.likes_post +=1
-    like.save()
-    return HttpResponse('')
+    if not request.user.is_authenticated:
+        return HttpResponse('')
+    content_type = ContentType.objects.get_for_model(Post)
+    try:
+        like_generic = Likes.objects.get(content_type=content_type,user_id=request.user.id,object_id=article_id)
+        like_generic.delete()
+    except ObjectDoesNotExist:
+        print('is None')
+        like_generic = Likes.objects.create(content_type=content_type,
+                                            user_id=request.user.id,
+                                            object_id=article_id,
+                                            like=True
+                                            )
+    return HttpResponse(Likes.objects.filter(content_type=content_type,object_id=article_id).count())
 
 def message_like(request, message_id):
     like = Offtop_Comment.objects.get(id=message_id)
@@ -125,7 +172,7 @@ def logout_user(request):
     return HttpResponseRedirect('/')
 
 def offtop(request):
-    objects= Offtop_Comment.objects.all()
+    # objects= Offtop_Comment.objects.all()
     return render(request,'offtop.html',{})
 
 def offtopjs(request):

@@ -4,7 +4,15 @@
     <a href="{{ request.build_absolute_uri }}" class="logo"><img src="/static/images/av_undef.png" alt="" /></a>
     <header>
         <h2>{{ user.username }}</h2>
-        <p>Ваше звание - <a href="">ноунейм</a></p>
+        <p>Звание - <a href="" style="color:#080808">{{ user_inf.rank_name }}</a></p>
+        <p>Репутация - <a href="" style="color:#080808" id="rep_user">{{ user_inf.get_count_lk }}</a></p>
+        {% if visible %}
+        <p><button id="btn_rep" onclick="add_rep_user({{ user.id }})" class="button fit">Топ узер ин зе ворлд</button></p>
+        {% endif %}
     </header>
 </section>
 {% endblock %}
+
+{% block content %}
+
+{% endblock content %}
