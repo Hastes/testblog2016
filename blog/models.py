@@ -9,7 +9,7 @@ from django.contrib.contenttypes.models import ContentType
 def upload_url(post, nameimage):
     return '%s\%s\%s' % (post.author, post.title, nameimage)
 def get_count_likes(id,model):
-    return Likes.objects.filter(content_type=ContentType.objects.get_for_model(Post),object_id=id).count()
+    return Likes.objects.filter(content_type=ContentType.objects.get_for_model(model),object_id=id).count()
 def get_count_comment(id):
     return Comment.objects.filter(comment_post=id).count()
 
@@ -91,8 +91,7 @@ class Likes(models.Model):
     content_object = GenericForeignKey('content_type', 'object_id')
 
 class UserProf(models.Model):
-    user_key = models.OneToOneField(User)
-    rank = models.IntegerField(default=0)
+    user_key = models.OneToOneField(User,primary_key=True)
     rank_name = models.CharField(max_length=10,default='НОУНЕЙМ')
     def get_count_lk(self):
-        return get_count_likes(self.id,UserProf)
+        return get_count_likes(self.user_key_id,UserProf)

@@ -215,7 +215,6 @@
                 function add_rep_user(user_id){
                     var btn = document.getElementById('btn_rep');
                     $('#btn_rep').fadeOut();
-                    console.log(user_id)
                   $.ajax({
                       url:'/user_profile/'+user_id+'/add_rep/',
                       cache: false,

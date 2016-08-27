@@ -77,20 +77,31 @@ def front(request,page_number=1):
 
 def userprofile(request,username):
     user = get_object_or_404(User,username=username)
-    UserProf.objects.update_or_create(user_key=auth.get_user(request))
-    user_inf = UserProf.objects.get(user_key=auth.get_user(request))
     content_type = ContentType.objects.get_for_model(UserProf)
+
     try:
-        like_generic = Likes.objects.get(content_type=content_type,user_id=request.user.id,object_id=user_inf.id)
+        UserProf.objects.get(user_key=user)
+    except ObjectDoesNotExist:
+        UserProf.objects.update_or_create(user_key=user)
+    user_inf = UserProf.objects.get(user_key=user)
+    rank = Likes.objects.filter(content_type=content_type,object_id=user_inf.user_key_id).count()
+    user_inf.rank = rank
+    user_inf.save()
+    if not request.user.is_authenticated:
+        return render(request,'userprofile.html',{'user':user,'user_inf':user_inf})
+    try:
+        Likes.objects.get(content_type=content_type,user_id=request.user.id,object_id=user_inf.user_key_id)
         visible_btn = False
+        print(visible_btn)
     except ObjectDoesNotExist:
         visible_btn = True
     return render(request,'userprofile.html',{'user':user,'user_inf':user_inf,'visible':visible_btn})
 
 def add_rep_user(request,id_user):
-    id_user = str(id_user)
     if not request.user.is_authenticated:
         return HttpResponse('')
+    if id_user == str(request.user.id):
+        return HttpResponse('ЧСВ')
     content_type = ContentType.objects.get_for_model(UserProf)
     try:
         like_generic = Likes.objects.get(content_type=content_type,user_id=auth.get_user(request).id,object_id=id_user)
