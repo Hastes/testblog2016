@@ -4,7 +4,7 @@ from rest_framework.serializers import (
     ModelField,
     HyperlinkedIdentityField)
 
-from blog.models import Offtop_Comment
+from blog.models import Offtop_Comment,UserProf
 from django.contrib.auth.models import User
 
 class Offtop_CommentSerializer(ModelSerializer):
@@ -20,3 +20,17 @@ class Offtop_CommentSerializer(ModelSerializer):
         ]
     def get_author(self,obj):
         return str(obj.author.username)
+
+class UserProfSerializer(ModelSerializer):
+    user_key = SerializerMethodField()
+    class Meta:
+        model = UserProf
+        fields = [
+            'user_key_id',
+            'user_key',
+            'rank_name',
+            'get_count_lk',
+            'avatar',
+        ]
+    def get_user_key(self,obj):
+        return str(obj.user_key.username)

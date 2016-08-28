@@ -40,6 +40,7 @@ urlpatterns = [
     url(r'^user_profile/(?P<username>[\w-]+)/$',views.userprofile,name='userprofile'),
     url(r'^user_profile/(\d+)/add_rep/$',views.add_rep_user,name='user_add_rep'),
     url(r'^blog/',include("blog.API.urls",namespace='blog_API')),
+    url(r'^users_section/$',views.users_section, name="users_section"),
     url(r'^get_ip/$',views.get_ip_user,name='get_ip_user'),
 ]
 

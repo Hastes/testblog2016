@@ -13,7 +13,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from  django.core import serializers
 from django.contrib import sessions
 from django.http import Http404
-from blog.API.serializers import Offtop_CommentSerializer
+from blog.API.serializers import Offtop_CommentSerializer, UserProfSerializer
 import json
 from blog.forms import CreatePostForm,AddCommentForPost
 from django.http import JsonResponse
@@ -206,6 +206,18 @@ def delete_message(request):
     else:
         raise Http404
     return HttpResponse()
+
+def users_section(request):
+    args = {}
+    userprof = UserProf.objects.all()[:5:]
+    try:
+        UserProf.objects.get(user_key=request.user)
+        req_user = UserProf.objects.filter(user_key=request.user)
+        args['request_user'] = UserProfSerializer(req_user,many=True).data
+    except ObjectDoesNotExist:
+        pass
+    args['user_section'] = UserProfSerializer(userprof,many=True).data
+    return HttpResponse(json.dumps(args), content_type="application/json")
 
 def testpage(request):
     return render(request,'index.html',{})

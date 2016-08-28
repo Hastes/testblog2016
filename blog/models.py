@@ -2,12 +2,15 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
 from django.core.urlresolvers import reverse
+from django.core.exceptions import ValidationError
 from django.conf import settings
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 
 def upload_url(post, nameimage):
     return '%s\%s\%s' % (post.author, post.title, nameimage)
+def upload_url_for_user(user,nameimage):
+    return 'userprofile\%s\%s' % (user.user_key.username,nameimage)
 def get_count_likes(id,model):
     return Likes.objects.filter(content_type=ContentType.objects.get_for_model(model),object_id=id).count()
 def get_count_comment(id):
@@ -36,7 +39,7 @@ class Post(models.Model):
                               upload_to=upload_url,
                               verbose_name='Постер',
                               width_field="width_field",
-                              height_field="heigth_field"
+                              height_field="heigth_field",
                               )
     width_field = models.IntegerField(null=True,default=0)
     heigth_field = models.IntegerField(null=True,default=0)
@@ -91,7 +94,35 @@ class Likes(models.Model):
     content_object = GenericForeignKey('content_type', 'object_id')
 
 class UserProf(models.Model):
-    user_key = models.OneToOneField(User,primary_key=True)
-    rank_name = models.CharField(max_length=10,default='НОУНЕЙМ')
     def get_count_lk(self):
         return get_count_likes(self.user_key_id,UserProf)
+
+    def validate_image(fieldfile_obj):
+        filesize = fieldfile_obj.file.size
+        limit = 300.0
+        if filesize > limit*1024:
+            raise ValidationError("Максимальный размер изображения %sKB" % str(limit))
+
+    avatar = models.ImageField(null=True,
+                              blank=True,
+                              upload_to=upload_url_for_user,
+                              verbose_name='Постер',
+                              width_field="width_field",
+                              height_field="heigth_field",
+                              validators=[validate_image],
+                              )
+    width_field = models.IntegerField(null=True,default=0)
+    heigth_field = models.IntegerField(null=True,default=0)
+    user_key = models.OneToOneField(User,primary_key=True)
+    rank_name = models.CharField(max_length=10,default='НОУНЕЙМ')
+
+    def __unicode__(self):
+        return str(self.user_key.username)
+    def __str__(self):
+        return str(self.user_key.username)
+    class Meta:
+        ordering = ['-user_key']
+
+User._meta.get_field('username').max_length = 11
+User._meta.get_field('username').help_text = 'Обязательное поле. Не более 11 символов. Только буквы, цифры и символы @/./+/-/_.'
+
