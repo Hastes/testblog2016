@@ -214,7 +214,7 @@ def users_section(request):
         UserProf.objects.get(user_key=request.user)
         req_user = UserProf.objects.filter(user_key=request.user)
         args['request_user'] = UserProfSerializer(req_user,many=True).data
-    except ObjectDoesNotExist:
+    except:
         pass
     args['user_section'] = UserProfSerializer(userprof,many=True).data
     return HttpResponse(json.dumps(args), content_type="application/json")
@@ -222,4 +222,4 @@ def users_section(request):
 def testpage(request):
     return render(request,'index.html',{})
 def testpage2(request):
-    return  render(request,'test.html',{})
+    return  render(request,'pusher.html',{})
