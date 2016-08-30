@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<!--<head>
+  <title>Pusher Test</title>
+  <script src="https://js.pusher.com/3.2/pusher.min.js"></script>
+  <script>
+
+    // Enable pusher logging - don't include this in production
+    Pusher.logToConsole = true;
+
+    var pusher = new Pusher('d1b7006b96f7a3a7ffc6', {
+      encrypted: true
+    });
+
+    var channel = pusher.subscribe('test_channel');
+    channel.bind('my_event', function(data) {
+      alert(data.message);
+    });
+  </script>
+</head>
+-->
+
+
+<script src="/static/assets/js/$ws.js"></script>
+<script>
+$ws('ws://localhost:8080').ready(function($ws, ws) {
+    // When connection is made, send a message
+    $ws.emit('showMessage', {
+        msg: 'WebSockets are fun!',
+    });
+    // And react to incoming messages
+    $ws.on('showMessage', function(data) {
+        alert(data.message);
+    });
+});
+</script>
