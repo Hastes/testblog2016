@@ -224,7 +224,6 @@ def english_get(request,pk):
     obj = English.objects.get(id=pk)
     args = {}
     args['eng']= EngilshSerializer(obj).data
-    print(args)
     return HttpResponse(json.dumps(args),content_type="application/json")
 
 def english_met(request):

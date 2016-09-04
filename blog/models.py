@@ -129,6 +129,7 @@ class English(models.Model):
     story = models.TextField()
     cultural_notes = models.TextField()
     action = models.TextField()
+    communicaton_skills = models.TextField(blank=True,null=True)
     def __str__(self):
         return str(self.lesson_number)
     class Meta:
