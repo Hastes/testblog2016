@@ -4,7 +4,7 @@ from rest_framework.serializers import (
     ModelField,
     HyperlinkedIdentityField)
 
-from blog.models import Offtop_Comment,UserProf
+from blog.models import Offtop_Comment,UserProf,English
 from django.contrib.auth.models import User
 
 class Offtop_CommentSerializer(ModelSerializer):
@@ -34,3 +34,14 @@ class UserProfSerializer(ModelSerializer):
         ]
     def get_user_key(self,obj):
         return str(obj.user_key.username)
+
+class EngilshSerializer(ModelSerializer):
+    class Meta:
+        model = English
+        fields = [
+            'lesson_number',
+            'vocabulary',
+            'story',
+            'cultural_notes',
+            'action',
+        ]

@@ -123,6 +123,18 @@ class UserProf(models.Model):
     class Meta:
         ordering = ['-user_key']
 
+class English(models.Model):
+    lesson_number = models.IntegerField(unique=True)
+    vocabulary = models.TextField()
+    story = models.TextField()
+    cultural_notes = models.TextField()
+    action = models.TextField()
+    def __str__(self):
+        return str(self.lesson_number)
+    class Meta:
+        ordering= ['lesson_number']
+
+
 User._meta.get_field('username').max_length = 11
 User._meta.get_field('username').help_text = 'Обязательное поле. Не более 11 символов. Только буквы, цифры и символы @/./+/-/_.'
 

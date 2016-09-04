@@ -18,6 +18,7 @@ from django.contrib import admin
 from blog import views
 
 
+
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^$', views.front,name='posts'),
@@ -42,8 +43,9 @@ urlpatterns = [
     url(r'^blog/',include("blog.API.urls",namespace='blog_API')),
     url(r'^users_section/$',views.users_section, name="users_section"),
     url(r'^get_ip/$',views.get_ip_user,name='get_ip_user'),
+    url(r'^english/$',views.english_met,name='enlish_met'),
+    url(r'^english_get/(\d+)/$',views.english_get)
 ]
-
 from . import settings
 import os
 from django.conf.urls.static import static

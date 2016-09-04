@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse,HttpResponseRedirect,HttpRequest
-from .models import Post, Comment, Offtop_Comment, Likes, UserProf
+from .models import Post, Comment, Offtop_Comment, Likes, UserProf,English
 from django.core.paginator import Paginator
 from ipware.ip import get_ip
 from  django.contrib.auth.forms import UserCreationForm,AuthenticationForm
@@ -13,7 +13,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from  django.core import serializers
 from django.contrib import sessions
 from django.http import Http404
-from blog.API.serializers import Offtop_CommentSerializer, UserProfSerializer
+from blog.API.serializers import Offtop_CommentSerializer, UserProfSerializer,EngilshSerializer
 import json
 from blog.forms import CreatePostForm,AddCommentForPost
 from django.http import JsonResponse
@@ -219,7 +219,17 @@ def users_section(request):
     args['user_section'] = UserProfSerializer(userprof,many=True).data
     return HttpResponse(json.dumps(args), content_type="application/json")
 
+
+def english_get(request,pk):
+    obj = English.objects.get(id=pk)
+    args = {}
+    args['eng']= EngilshSerializer(obj).data
+    print(args)
+    return HttpResponse(json.dumps(args),content_type="application/json")
+
+def english_met(request):
+    return render(request,'english.html',{'eng':English.objects.all()})
 def testpage(request):
     return render(request,'index.html',{})
 def testpage2(request):
-    return  render(request,'pusher.html',{})
+    return render(request,'pusher.html',{})

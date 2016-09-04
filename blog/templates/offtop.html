@@ -48,7 +48,7 @@
         <ul class="actions">
             <li><input id="send" onclick="offtop();" type="submit" value="Отправить сообщение"></li>
             <li><input type="reset" value="Сброс"></li>
-            <li><input id="del_all" type="submit" onclick="delete_comments()" value="Отчистить"></li>
+            <li><input id="del_all" type="submit" onclick="delete_comments()" value="Очистить"></li>
         </ul>
     </div>
     </form>
@@ -89,7 +89,6 @@
                   $("#message_id"+message_id).fadeOut();
                   $.ajax({
                       url:'/messagelike/'+message_id,
-                      cache: false,
                       success: function(){
                           $("#message_id"+message_id).html(val+1);
                           obj.style.cssText =   "pointer-events: auto ";

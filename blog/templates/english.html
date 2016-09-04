@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+
+
+
+
+{% block content %}
+    {% for obj in eng %}
+        <div>
+            <a href="" class="spoiler_links"><b>Lesson {{ obj.lesson_number }}</b></a><br>
+            <div class="spoiler_body">
+                    <div>
+            <a id="vocabulary{{ obj.id }}" class="spoiler_links" onclick="get_data({{ obj.id }},this.id)" >Vocabulary</a><br>
+                <div id="v{{ obj.id }}" class="spoiler_body"></div>
+                    </div>
+                    <div>
+            <a id="story{{ obj.id }}" class="spoiler_links" class="td" onclick="get_data({{ obj.id }}, this.id)" >Story</a><br>
+                <div id="s{{ obj.id }}" class="spoiler_body"></div>
+                    </div>
+                    <div>
+            <a id="cultural_notes{{ obj.id }}" class="spoiler_links" onclick="get_data({{ obj.id }},this.id)" >Cultural notes</a><br>
+                <div id="c{{ obj.id }}" class="spoiler_body"></div>
+                    </div>
+                    <div>
+            <a id="action{{ obj.id }}" class="spoiler_links" onclick="get_data({{ obj.id }},this.id)" >Action</a><br>
+                <div id="a{{ obj.id }}" class="spoiler_body">123</div>
+                    </div>
+            </div>
+        </div>
+    {% endfor %}
+
+
+
+<script type="text/javascript">
+function get_data(lesson_id,td){
+    $.ajax({
+        url:'/english_get/'+lesson_id+'/',
+        success: function (eng){
+                var obj = document.getElementById(td);
+                if (td === "vocabulary"+lesson_id) $('#v'+lesson_id).html((eng.eng.vocabulary).replace(/\n/g,"<br>"));
+                if (td === "story"+lesson_id) $('#s'+lesson_id).html((eng.eng.story).replace(/\n/g,"<br>"));
+                if (td === "cultural_notes"+lesson_id) $('#c'+lesson_id).html((eng.eng.cultural_notes).replace(/\n/g,"<br>"));
+                if (td === "action"+lesson_id) $('#a'+lesson_id).html((eng.eng.action).replace(/\n/g,"<br>"));
+        }
+
+    });
+}
+$(document).ready(function(){
+ $('.spoiler_links').click(function(){
+  $(this).parent().children('div.spoiler_body').toggle('normal');
+  return false;
+ });
+});
+</script>
+
+<style type="text/css">
+ .td {cursor: pointer}
+ .spoiler_body {display:none;}
+ .spoiler_links {cursor:pointer;}
+</style>
+{% endblock content %}
