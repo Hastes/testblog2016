@@ -22,7 +22,7 @@
 
 				<!-- Header -->
 					<header id="header">
-						<h1><a href="/">Future Imperfect</a></h1>
+						<h1><a href="/">{{ objects.title }}</a></h1>
 						<nav class="links">
 							<ul>
 								<li><a href="/offtop/">ОФФТОП</a></li>
@@ -56,19 +56,19 @@
 								<header>
 									<div class="title">
 										<h2><a href="#">{{ objects.title }}</a></h2>
-										<p>Lorem ipsum dolor amet nullam consequat etiam feugiat</p>
+										<p>{{ objects.about }}</p>
 									</div>
 									<div class="meta">
                                         {{ objects.created_date }}
-										<a href="#" class="author"><span class="name">{{ objects.author }}</span><img src="/static/images/avatar.jpg" alt="" /></a>
+										<a href="#" class="author"><span class="name">{{ objects.author }}</span><img src="/static/images/av_undef.png" alt="" /></a>
 									</div>
 								</header>
 								<p>{{ objects.message|linebreaksbr}}</p>
 								<footer>
 									<ul class="stats">
-										<li><a href="#">НА ГЛАВНУЮ</a></li>
-										<li><a href="#" class="icon fa-heart">{{ objects.get_count_lk }}</a></li>
-										<li><a href="#" class="icon fa-comment">{{ comments.count }}</a></li>
+										<li><a href="/">НА ГЛАВНУЮ</a></li>
+										<li><a id="like_id{{ objects.id }}" onclick="postlike({{ objects.id }})" class="icon fa-heart">{{ objects.get_count_lk }}</a></li>
+										<li><a href="#botDiv" class="icon fa-comment">{{ comments.count }}</a></li>
                                         <!-- Put this div tag to the place, where the Like block will be -->
                                         <li><div id="{{ objects.id }}"></div>
                                             <script type="text/javascript">
@@ -79,6 +79,7 @@
 
 							</article>
                             {% if comments.count != 0 %}
+                                <div id="botDiv"></div>
                             <h2>&emsp; Комментарии:</h2>
                             {% endif %}
                         {% for com in comments %}
@@ -123,6 +124,33 @@
             onlyWidgets: true
           });
         </script>
+        <script type="text/javascript">
 
+        $('a[href^="#"]').click(function(){
+        //Сохраняем значение атрибута href в переменной:
+        var target = $(this).attr('href');
+        $('html, body').animate({scrollTop: $(target).offset().top}, 500);
+        return false;
+        });
+
+    </script>
+    <script>
+        function postlike(post_id){
+                  var obj= document.getElementById('like_id'+post_id);
+                  obj.style.cssText =   "pointer-events: none;";
+                  $("#like_id"+post_id).fadeOut();
+                  $.ajax({
+                      url:'/likepost/'+post_id,
+                      success: function(data){
+                          if(data === ''){
+                              window.location.href = "{% url 'reg' %}"
+                          }
+                          $("#like_id"+post_id).html(data);
+                          obj.style.cssText = "pointer-events: auto ";
+                          $("#like_id"+post_id).fadeIn()
+                      }
+                  })
+                  };
+              </script>
 	</body>
 </html>

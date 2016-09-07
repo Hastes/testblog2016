@@ -28,14 +28,15 @@
     {% else %}
         {% if request.user.is_authenticated %}
             <section>
-            <!--                -->
+            <h3><a href="{% url "offtop" %}" >ОФФТОП</a></h3><hr>
+            <h3><a href="{% url "english_met" %}" >АНГЛИЙСКИЙ</a></h3>
+
              </section>
         {% endif %}
-
 {% endif %}
 
 
-{% if request.user.is_authenticated %};
+{% if request.user.is_authenticated %}
     <section>
     <ul class="links">
 <li><a href="{% url 'logout' %}" class="button big fit">Выход</a></li>

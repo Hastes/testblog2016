@@ -56,7 +56,7 @@
         </ul>
         <ul class="stats">
             <li><a id="like_id{{ post.id }}" onclick="postlike({{ post.id }})" class="icon fa-heart">{{ post.get_count_lk }}</a></li>
-            <li><a class="icon fa-comment">{{ post.get_count_com }}</a></li>
+            <li><a href="{{ post.get_absolute_url }}"  class="icon fa-comment">{{ post.get_count_com }}</a></li>
         </ul>
     </footer>
 </article>

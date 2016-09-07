@@ -62,9 +62,10 @@ def update_article(request, article_id=None):
     return render(request,'created.html',args)
 
 def delete_article(request, article_id=None):
-    objects = get_object_or_404(Post, id=article_id)
-    objects.delete()
-    Comment.objects.filter(comment_post=article_id).delete()
+    if request.user.is_superuser:
+        objects = get_object_or_404(Post, id=article_id)
+        objects.delete()
+        Comment.objects.filter(comment_post=article_id).delete()
     return HttpResponseRedirect('/')
 
 def front(request,page_number=1):
