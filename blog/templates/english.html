@@ -60,7 +60,7 @@ function get_data(lesson_id,td){
     $.ajax({
         url:'/english_get/'+lesson_id+'/',
         success: function (eng){
-                var obj = document.getElementById(td);
+                console.log(eng);
                 if (td === "vocabulary"+lesson_id){
                     $('#v'+lesson_id).html((eng.eng.vocabulary).replace(/\n/g,"<br>")).toggle('normal');
                     return false;

@@ -13,9 +13,10 @@ from django.core.exceptions import ObjectDoesNotExist
 from  django.core import serializers
 from django.contrib import sessions
 from django.http import Http404
+from django.utils.text import slugify
 from blog.API.serializers import Offtop_CommentSerializer, UserProfSerializer,EngilshSerializer
 import json
-from blog.forms import CreatePostForm,AddCommentForPost
+from blog.forms import CreatePostForm,AddCommentForPost,UserCreateForm
 from django.http import JsonResponse
 # Create your views here.
 count_page=2
@@ -151,9 +152,9 @@ def message_like(request, message_id):
 
 def register_user(request):
     args = {}
-    args['form'] = UserCreationForm()
+    args['form'] = UserCreateForm()
     if request.POST:
-        user_form = UserCreationForm(request.POST)
+        user_form = UserCreateForm(request.POST)
         if user_form.is_valid():
             user_form.save()
             login(request, authenticate(username=request.POST['username'], password=request.POST['password1']))
