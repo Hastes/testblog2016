@@ -78,7 +78,6 @@ def delete_article(request, article_id=None):
     return HttpResponseRedirect('/')
 
 def front(request,page_number=1):
-    comment_count = Comment.objects.count()
     objects = Post.objects.all()
     search = request.GET.get('q')
     if search:
