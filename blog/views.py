@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse,HttpResponseRedirect,HttpRequest
-from .models import Post, Comment, Offtop_Comment, Likes, UserProf,English
+from .models import Post, Comment, Offtop_Comment, Likes, UserProf,English,NewsProfile,ImagePostPicture
 from django.core.paginator import Paginator
 from ipware.ip import get_ip
 from  django.contrib.auth.forms import UserCreationForm,AuthenticationForm
@@ -16,7 +16,7 @@ from django.http import Http404
 from django.utils.text import slugify
 from blog.API.serializers import Offtop_CommentSerializer, UserProfSerializer,EngilshSerializer
 import json
-from blog.forms import CreatePostForm,AddCommentForPost,UserCreateForm
+from blog.forms import CreatePostForm,AddCommentForPost,UserCreateForm,AddNewsProfile,ImagePostPictureForm,UserSettingsForm
 from django.http import JsonResponse
 # Create your views here.
 count_page=2
@@ -37,27 +37,36 @@ def article(request, article_id=None):
 
 def created_post(request):
     if request.user.is_staff or request.user.is_superuser:
-        form = CreatePostForm(request.POST or None,request.FILES or None)
-        if form.is_valid():
+        form = CreatePostForm(request.POST or None)
+        formimg = ImagePostPictureForm(request.POST or None)
+        if form.is_valid() & formimg.is_valid():
             instance = form.save(commit=False)
             instance.author = request.user
             instance.save()
+            instance_img = formimg.save(commit=False)
+            instance_img.key = instance
+            instance_img.save()
             return HttpResponseRedirect('/')
     else:
         raise Http404
-    return render(request,'created.html',{'form':form})
+    return render(request,'created.html',{'form':form,'formimg':formimg})
 
 def update_article(request, article_id=None):
     instance = get_object_or_404(Post,id=article_id)
+    instance_img = ImagePostPicture.objects.get(key = instance)
     form = CreatePostForm(request.POST or None,request.FILES or None,instance=instance)
-    if form.is_valid():
+    formimg = ImagePostPictureForm(request.POST or None,instance= instance_img )
+    if form.is_valid() & formimg.is_valid():
         instance = form.save(commit=False)
         instance.author = request.user
         instance.save()
+        instance_img = formimg.save(commit=False)
+        instance_img.key = instance
+        instance_img.save()
         return HttpResponseRedirect('/')
     args = {
-        'instance':instance,
         'form':form,
+        'formimg':formimg,
     }
     return render(request,'created.html',args)
 
@@ -79,8 +88,8 @@ def front(request,page_number=1):
 
 def userprofile(request,username):
     user = get_object_or_404(User,username=username)
+    get_news = NewsProfile.objects.filter(key = user.id)[:15:]
     content_type = ContentType.objects.get_for_model(UserProf)
-
     try:
         UserProf.objects.get(user_key=user)
     except ObjectDoesNotExist:
@@ -89,15 +98,31 @@ def userprofile(request,username):
     rank = Likes.objects.filter(content_type=content_type,object_id=user_inf.user_key_id).count()
     user_inf.rank = rank
     user_inf.save()
+    form_news = None
+    if user.username == request.user.username:
+        form_news = AddNewsProfile(request.POST or None)
+        formimg = UserSettingsForm(request.POST or None,instance=user_inf)
+        if form_news.is_valid() & formimg.is_valid():
+            form = form_news.save(commit=False)
+            form.key = user_inf
+            form.save()
+            formimg = formimg.save(commit=False)
+            formimg.user_key = user
+            formimg.save()
+            return HttpResponseRedirect(request.get_full_path())
+    else:
+        form_news = None
+        formimg = None
     if not request.user.is_authenticated:
-        return render(request,'userprofile.html',{'user':user,'user_inf':user_inf})
+        return render(request,'userprofile.html',{'user':user,'user_inf':user_inf,'get_news':get_news})
     try:
         Likes.objects.get(content_type=content_type,user_id=request.user.id,object_id=user_inf.user_key_id)
         visible_btn = False
         print(visible_btn)
     except ObjectDoesNotExist:
         visible_btn = True
-    return render(request,'userprofile.html',{'user':user,'user_inf':user_inf,'visible':visible_btn})
+    return render(request,'userprofile.html',{'user':user,'user_inf':user_inf,'visible':visible_btn,'news':NewsProfile.objects.all(),
+                                              'formimg':formimg,'form_news':form_news,'get_news':get_news})
 
 def add_rep_user(request,id_user):
     if not request.user.is_authenticated:
@@ -180,7 +205,6 @@ def login_user(request):
     return render(request,'login.html',args)
 
 def logout_user(request):
-
     logout(request)
     return HttpResponseRedirect('/')
 
@@ -221,12 +245,12 @@ def users_section(request):
     args['user_section'] = UserProfSerializer(userprof,many=True).data
     return HttpResponse(json.dumps(args), content_type="application/json")
 
-
 def english_get(request,pk):
     obj = English.objects.get(id=pk)
     args = {}
     args['eng']= EngilshSerializer(obj).data
     return HttpResponse(json.dumps(args),content_type="application/json")
+
 
 def english_met(request):
     return render(request,'english.html',{'eng':English.objects.all()})

@@ -27,7 +27,10 @@ DEBUG = True
 
 
 # Application definition
-
+LIBRALES_APPS = [
+    'rest_framework',
+    'pyuploadcare.dj',
+]
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -36,9 +39,13 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'blog',
-    'rest_framework'
-]
+    'games',
+] + LIBRALES_APPS
 
+UPLOADCARE = {
+    'pub_key': '3e7990f3a550c2634b3a',
+    'secret': '6b6a74754210ffbca137',
+}
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',

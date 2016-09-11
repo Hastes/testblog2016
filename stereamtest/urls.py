@@ -15,10 +15,10 @@ Including another URLconf
 """
 from django.conf.urls import url,include
 from django.contrib import admin
-from blog import views
+from blog import views,pusher
 
 
-
+admin.site.site_header = "2K16 | Как ты сюда попал?"
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^$', views.front,name='posts'),
@@ -44,7 +44,9 @@ urlpatterns = [
     url(r'^users_section/$',views.users_section, name="users_section"),
     url(r'^get_ip/$',views.get_ip_user,name='get_ip_user'),
     url(r'^english/$',views.english_met,name='english_met'),
-    url(r'^english_get/(\d+)/$',views.english_get)
+    url(r'^english_get/(\d+)/$',views.english_get),
+    url(r'^games/',include("games.urls"),name='games'),
+    url(r'^alertpost/$', pusher.message,name="alertpost"),
 ]
 from . import settings
 import os

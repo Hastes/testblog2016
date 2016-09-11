@@ -1,4 +1,5 @@
 import pusher
+from django.http import HttpResponse
 
 pusher_client = pusher.Pusher(
   app_id='242595',
@@ -7,4 +8,9 @@ pusher_client = pusher.Pusher(
   ssl=True
 )
 
-#pusher_client.trigger('test_channel', 'my_event', {'message': 'hello world'})
+def message(request):
+    if request.POST:
+        print(request.POST["message"])
+        message = request.POST["message"]
+        pusher_client.trigger('test_channel', 'my_event', {'message': message})
+    return HttpResponse('')

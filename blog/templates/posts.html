@@ -44,10 +44,10 @@
             <a href="{{ post.get_absolute_url }}delete/" class="author"><span class="name">{{ post.author }}</span><img src="/static/images/av_undef.png" alt="" /></a>
         </div>
     </header>
-    {% if post.image %}
-        <a href="#" class="image featured"><img src="{{ post.image.url }}" alt="" /></a>
+    {% if post.img_post  %}
+        <a href="#" class="image featured"><img src="{{ post.img_post.image }}" alt="" /></a>
     {% else %}
-   <a href="#" class="image featured"><img src="/static/images/cat.gif" alt="" /></a>
+        <a href="#" class="image featured"><img src="/static/images/cat.gif" alt="" /></a>
     {% endif %}
     <p>{{ post.message|truncatewords:100 }}</p>
     <footer>

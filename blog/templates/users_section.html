@@ -10,9 +10,14 @@
         $.ajax({
           url: '/users_section/',
           success: function(data){
-              console.log(data.request_user)
-              if (data.request_user){
+              console.log(data.request_user);
+              var user = "{{ user_inf.user_key }}";
+              if (user === ""){
                   if (data.request_user[0].avatar !== null) document.getElementById('avatar').src = data.request_user[0].avatar;}
+              if (user !== ""){
+                    if ("{{ user_inf.avatar }}" !== "None") document.getElementById('avatar').src = "{{ user_inf.avatar }}";
+
+              }
               data.user_section.forEach(function(obj){
                   if(obj.avatar=== null){
                       obj.avatar = '/static/images/av_undef.png/'

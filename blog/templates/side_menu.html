@@ -7,7 +7,7 @@
 
 {% if request.user.is_authenticated %}
     <section>
-    <center><h2 class="center"><a href="" >{{ request.user.username }}</a></h2><br><div id="ip_get_user_side"></div></center>
+    <center><h2 class="center"><a href="{% url 'userprofile'  request.user.username %}">{{ request.user.username }}</a></h2><br><div id="ip_get_user_side"></div></center>
     <style>.center{
         color: rgba(1, 68, 255, 0.48);
         font-size: 158%;
@@ -19,18 +19,17 @@
 
 {% if request.user.is_superuser %}
     <section>
-    <h3><a href="/admin/" >Админ панель</a></h3>
-    <hr>
-    <h3><a href="/admin/" >Список пользователей</a></h3>
-    <hr>
+    <h3><a href="/admin/" >Админ панель</a></h3><hr>
+    <h3><a href="/admin/" >Список пользователей</a></h3><hr>
+    <h3><a href="#" onclick="post_mess()" >Оповещение для юзверей</a></h3><hr>
     <h3><a href="{% url 'created_post' %}" >Добавить статью</a></h3>
     </section>
     {% else %}
         {% if request.user.is_authenticated %}
             <section>
             <h3><a href="{% url "offtop" %}" >ОФФТОП</a></h3><hr>
-            <h3><a href="{% url "english_met" %}" >АНГЛИЙСКИЙ</a></h3>
-
+            <h3><a href="{% url "english_met" %}" >АНГЛИЙСКИЙ</a></h3><hr>
+            <h3><a href="{% url "2048" %}" >2048 GAME</a></h3>
              </section>
         {% endif %}
 {% endif %}
@@ -61,6 +60,23 @@
                 console.log(data.get_ip)
             }
         })
-    })
+    });
+    function post_mess(){
+        var message = prompt('Ваше сообщение пользователям:');
+        if (message === null){
+            return false;
+        }
+        $.ajax({
+            type: "POST",
+            url: '/alertpost/',
+            data:{
+                csrfmiddlewaretoken: '{{ csrf_token }}',
+                message: message
+            },
+            success:function(){
+
+            }
+        })
+    }
 </script>
 

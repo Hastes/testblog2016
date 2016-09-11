@@ -6,6 +6,8 @@ from django.core.exceptions import ValidationError
 from django.conf import settings
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
+from pyuploadcare.dj.models import ImageField
+#from annoying.fields import AutoOneToOneField
 
 def upload_url(post, nameimage):
     return '%s\%s\%s' % (post.author, post.title, nameimage)
@@ -34,14 +36,14 @@ class Post(models.Model):
     about = models.CharField(max_length=40, verbose_name='Описание')
     message = models.TextField(verbose_name='Текст')
     likes_post = models.IntegerField(default=0)
-    image = models.ImageField(null=True,
-                              blank=True,
-                              upload_to=upload_url,
-                              verbose_name='Постер',
-                              width_field="width_field",
-                              height_field="heigth_field",
-                              )
-    width_field = models.IntegerField(null=True,default=0)
+    # image = models.ImageField(null=True,
+    #                           blank=True,
+    #                           upload_to=upload_url,
+    #                           verbose_name='Постер',
+    #                           width_field="width_field",
+    #                           height_field="heigth_field",
+    #                           )
+    # width_field = models.IntegerField(null=True,default=0)
     heigth_field = models.IntegerField(null=True,default=0)
     created_date = models.DateTimeField(default=timezone.now)
     def get_count_lk(self):
@@ -97,22 +99,15 @@ class UserProf(models.Model):
     def get_count_lk(self):
         return get_count_likes(self.user_key_id,UserProf)
 
-    def validate_image(fieldfile_obj):
-        filesize = fieldfile_obj.file.size
-        limit = 300.0
-        if filesize > limit*1024:
-            raise ValidationError("Максимальный размер изображения %sKB" % str(limit))
+    # def validate_image(fieldfile_obj):
+    #     filesize = fieldfile_obj.file.size
+    #     limit = 300.0
+    #     if filesize > limit*1024:
+    #         raise ValidationError("Максимальный размер изображения %sKB" % str(limit))
 
-    avatar = models.ImageField(null=True,
-                              blank=True,
-                              upload_to=upload_url_for_user,
-                              verbose_name='Постер',
-                              width_field="width_field",
-                              height_field="heigth_field",
-                              validators=[validate_image],
-                              )
-    width_field = models.IntegerField(null=True,default=0)
-    heigth_field = models.IntegerField(null=True,default=0)
+    avatar = ImageField(verbose_name="Аватар",blank=True,null=True,manual_crop="")
+    # width_field = models.IntegerField(null=True,default=0)
+    # heigth_field = models.IntegerField(null=True,default=0)
     user_key = models.OneToOneField(User,primary_key=True)
     rank_name = models.CharField(max_length=10,default='НОУНЕЙМ')
 
@@ -122,6 +117,13 @@ class UserProf(models.Model):
         return str(self.user_key.username)
     class Meta:
         ordering = ['-user_key']
+
+class NewsProfile(models.Model):
+    key = models.ForeignKey(UserProf)
+    news = models.TextField(max_length=120,verbose_name="Что у вас нового?")
+    date = models.DateTimeField(default=timezone.now())
+    class Meta:
+        ordering = ['-date']
 
 class English(models.Model):
     lesson_number = models.IntegerField(unique=True)
@@ -134,6 +136,10 @@ class English(models.Model):
         return str(self.lesson_number)
     class Meta:
         ordering= ['lesson_number']
+
+class ImagePostPicture(models.Model):
+    key = models.OneToOneField(Post,related_name="img_post")
+    image = ImageField(verbose_name="Постер(не обязательно)",blank=True,manual_crop="")
 
 
 User._meta.get_field('username').max_length = 11

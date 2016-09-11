@@ -1,18 +1,61 @@
 {% extends "base.html" %}
 {% block myprof %}
 <section id="intro">
-    <a href="{{ request.build_absolute_uri }}" class="logo"><img src="/static/images/av_undef.png" alt="" /></a>
+    <a href="{{ request.build_absolute_uri }}" class="logo"><img id="avatar" src="/static/images/av_undef.png" alt="" /></a>
     <header>
         <h2>{{ user.username }}</h2>
         <p>Звание - <a href="" style="color:#080808">{{ user_inf.rank_name }}</a></p>
         <p>Репутация - <a href="" style="color:#080808" id="rep_user">{{ user_inf.get_count_lk }}</a></p>
         {% if visible %}
         <p><button id="btn_rep" onclick="add_rep_user({{ user.id }})" class="button fit">Топ узер ин зе ворлд</button></p>
+            {% if request.user.username == user.username %}
+                <div>
+                    <div class="spoiler_links"><i><p>Настройки</p></i></div>
+                    <div class="spoiler_body">
+                        <form method="POST">{% csrf_token %}
+                        {{ formimg.media }}
+                        {{ formimg.as_p }}
+                        <p><button id="btn_rep" type="submit" >Изменить аватар</button></p>
+                        </form>
+                    </div>
+                </div>
+                {% endif %}
         {% endif %}
     </header>
 </section>
+    <script type="application/javascript">
+    $(document).ready(function(){
+ $('.spoiler_links').click(function(){
+     $(this).parent().children('div.spoiler_body').toggle('normal');
+     return false;
+ });
+});
+    </script>
+    <style type="text/css">
+     .links {cursor: pointer;}
+     .spoiler_body {display:none;}
+ .spoiler_links {cursor:pointer;}
+</style>
 {% endblock %}
 
 {% block content %}
+     {% if request.user.username == user.username %}
+        <form method="POST">
+        {% csrf_token %}
+        {{ form_news.as_p }}
+        <input type="submit">
+         </form>
+    {% else %}
+         <center><h2>НОВОСТИ ПОЛЬЗОВАТЕЛЯ: </h2><br></center>
+    {% if get_news.count == 0 %}
+            <center><p>К сожалению у этого человека нет никаких новостей((</p></center>
+        {% endif %}
+    {% endif %}
+    {% for obj in get_news %}
+        <article class="post">
+            <h3 style="float: left">{{ user.username }}</h3> <p style="float: right">{{ obj.date }}</p><br><hr>
+            <p>{{ obj.news }}</p><br>
+            </article>
 
+    {% endfor %}
 {% endblock content %}
