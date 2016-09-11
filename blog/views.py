@@ -83,7 +83,7 @@ def front(request,page_number=1):
     if search:
         objects = Post.objects.filter(title__icontains=search)
     current_page = Paginator(objects,count_page)
-    return render(request,'posts.html',{'objects':current_page.page(page_number),'comment_count':comment_count})
+    return render(request,'posts.html',{'objects':current_page.page(page_number)})
 
 def userprofile(request,username):
     user = get_object_or_404(User,username=username)
