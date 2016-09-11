@@ -3,7 +3,6 @@ autobahn==0.16.0
 beautifulsoup4==4.5.1
 bleach==1.4.3
 cffi==1.7.0
-closure-linter==2.3.19
 cryptography==1.5
 dj-database-url==0.4.1
 Django==1.10
