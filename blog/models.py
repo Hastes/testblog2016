@@ -74,7 +74,7 @@ class Comment(models.Model):
 
 class Offtop_Comment(models.Model):
     author = models.ForeignKey(settings.AUTH_USER_MODEL, default=1)
-    message = models.CharField(max_length=300)
+    message = models.TextField(max_length=300)
     likes = models.IntegerField(default=0)
     created_date = models.DateTimeField(default=timezone.now)
     def get_count_lk(self):
