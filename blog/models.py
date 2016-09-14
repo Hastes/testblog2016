@@ -96,23 +96,20 @@ class Likes(models.Model):
     content_object = GenericForeignKey('content_type', 'object_id')
 
 class UserProf(models.Model):
-
     def get_count_lk(self):
         return get_count_likes(self.user_key_id,UserProf)
 
-    user_key = models.OneToOneField(User,primary_key=True)
-    avatar = ImageField(verbose_name="Аватар",blank=True,null=True,manual_crop="")
-    rank_name = models.CharField(max_length=10,default='НОУНЕЙМ')
     # def validate_image(fieldfile_obj):
     #     filesize = fieldfile_obj.file.size
     #     limit = 300.0
     #     if filesize > limit*1024:
     #         raise ValidationError("Максимальный размер изображения %sKB" % str(limit))
 
-
+    avatar = ImageField(verbose_name="Аватар",blank=True,null=True,manual_crop="")
     # width_field = models.IntegerField(null=True,default=0)
     # heigth_field = models.IntegerField(null=True,default=0)
-
+    user_key = models.OneToOneField(User,primary_key=True)
+    rank_name = models.CharField(max_length=10,default='НОУНЕЙМ')
 
     def __unicode__(self):
         return str(self.user_key.username)
@@ -143,8 +140,9 @@ class English(models.Model):
 class ImagePostPicture(models.Model):
     key = models.OneToOneField(Post,related_name="img_post")
     image = ImageField(verbose_name="Постер(не обязательно)",blank=True,manual_crop="")
+    text = models.TextField()
 
 
-User._meta.get_field('username').max_length = 11
-User._meta.get_field('username').help_text = 'Обязательное поле. Не более 11 символов. Только буквы, цифры и символы @/./+/-/_.'
+#User._meta.get_field('username').max_length = 11
+#User._meta.get_field('username').help_text = 'Обязательное поле. Не более 11 символов. Только буквы, цифры и символы @/./+/-/_.'
 

@@ -16,7 +16,7 @@ from django.http import Http404
 from django.utils.text import slugify
 from blog.API.serializers import Offtop_CommentSerializer, UserProfSerializer,EngilshSerializer
 import json
-from blog.forms import CreatePostForm,AddCommentForPost,UserCreateForm,AddNewsProfile,ImagePostPictureForm,UserSettingsForm
+from blog.forms import CreatePostForm,AddCommentForPost,AddNewsProfile,ImagePostPictureForm,UserSettingsForm
 from django.http import JsonResponse
 # Create your views here.
 count_page=2
