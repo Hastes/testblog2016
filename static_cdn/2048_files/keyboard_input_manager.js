@@ -43,10 +43,10 @@ KeyboardInputManager.prototype.listen = function () {
     76: 1, // Vim right
     74: 2, // Vim down
     72: 3, // Vim left
-  //  87: 0, // W
-  //  68: 1, // D
-  //  83: 2, // S
-  //  65: 3  // A
+    87: 0, // W
+    68: 1, // D
+    83: 2, // S
+    65: 3  // A
   };
 
   // Respond to direction keys
@@ -57,6 +57,9 @@ KeyboardInputManager.prototype.listen = function () {
 
     // Ignore the event if it's happening in a text field
     if (self.targetIsInput(event)) return;
+    if (event.target.tagName === 'TEXTAREA') {
+      return false;
+    }
 
     if (!modifiers) {
       if (mapped !== undefined) {
