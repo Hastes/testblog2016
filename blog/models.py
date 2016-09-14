@@ -96,20 +96,23 @@ class Likes(models.Model):
     content_object = GenericForeignKey('content_type', 'object_id')
 
 class UserProf(models.Model):
+
     def get_count_lk(self):
         return get_count_likes(self.user_key_id,UserProf)
 
+    user_key = models.OneToOneField(User,primary_key=True)
+    avatar = ImageField(verbose_name="Аватар",blank=True,null=True,manual_crop="")
+    rank_name = models.CharField(max_length=10,default='НОУНЕЙМ')
     # def validate_image(fieldfile_obj):
     #     filesize = fieldfile_obj.file.size
     #     limit = 300.0
     #     if filesize > limit*1024:
     #         raise ValidationError("Максимальный размер изображения %sKB" % str(limit))
 
-    avatar = ImageField(verbose_name="Аватар",blank=True,null=True,manual_crop="")
+
     # width_field = models.IntegerField(null=True,default=0)
     # heigth_field = models.IntegerField(null=True,default=0)
-    user_key = models.OneToOneField(User,primary_key=True)
-    rank_name = models.CharField(max_length=10,default='НОУНЕЙМ')
+
 
     def __unicode__(self):
         return str(self.user_key.username)
@@ -121,7 +124,7 @@ class UserProf(models.Model):
 class NewsProfile(models.Model):
     key = models.ForeignKey(UserProf)
     news = models.TextField(max_length=120,verbose_name="Что у вас нового?")
-    date = models.DateTimeField(default=timezone.now())
+    date = models.DateTimeField(default=timezone.now)
     class Meta:
         ordering = ['-date']
 
