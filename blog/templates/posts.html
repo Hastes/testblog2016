@@ -41,7 +41,7 @@
         </div>
         <div class="meta">
             {{ post.created_date|date:'Y-m-d' }}<br>С момента публикации:<br>{{ post.created_date|timesince }}<br>
-            <a href="{{ post.get_absolute_url }}delete/" class="author"><span class="name">{{ post.author }}</span><img src="/static/images/av_undef.png" alt="" /></a>
+            <a href="{{ post.get_absolute_url }}delete/" class="author"><span class="name">{{ post.author }}</span><img src="{{ post.author.user_prof.avatar }}" alt="" /></a>
         </div>
     </header>
     {% if post.img_post.image  %}

@@ -108,7 +108,7 @@ class UserProf(models.Model):
     avatar = ImageField(verbose_name="Аватар",blank=True,null=True,manual_crop="")
     # width_field = models.IntegerField(null=True,default=0)
     # heigth_field = models.IntegerField(null=True,default=0)
-    user_key = models.OneToOneField(User,primary_key=True)
+    user_key = models.OneToOneField(User,primary_key=True,related_name="user_prof")
     rank_name = models.CharField(max_length=10,default='НОУНЕЙМ')
 
     def __unicode__(self):
