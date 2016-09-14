@@ -83,8 +83,9 @@
                                     {% if request.user.is_authenticated %}
 									<p>Ссылка на ваш профиль: <a href="{% url 'userprofile'  request.user.username %}">{{ request.user.username }}</a></p>
                                     {% else %}
-                                        <a href="{% url 'reg' %}">Зарегистрироваться</a>
+                                        <p><a href="{% url 'reg' %}">Зарегистрироваться</a></p>
                                     {% endif %}
+                                    <p><div id="header_check_activ" style="color:red"></div></p>
 								</header>
 							</section>
                         {% endblock %}

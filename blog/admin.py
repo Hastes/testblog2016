@@ -15,8 +15,6 @@ class AdminPostModel(admin.ModelAdmin):
     inlines = [InlinePostPicture]
 
 
-
-
 admin.site.register(Offtop_Comment)
 admin.site.register(Post,AdminPostModel)
 admin.site.register(Comment)

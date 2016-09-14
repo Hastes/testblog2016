@@ -52,6 +52,8 @@ def created_post(request):
     return render(request,'created.html',{'form':form,'formimg':formimg})
 
 def update_article(request, article_id=None):
+    if not (request.user.is_staff or request.user.is_superuser):
+        raise Http404
     instance = get_object_or_404(Post,id=article_id)
     instance_img = ImagePostPicture.objects.get(key = instance)
     form = CreatePostForm(request.POST or None,request.FILES or None,instance=instance)

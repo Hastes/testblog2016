@@ -12,8 +12,13 @@
           success: function(data){
               var user = "{{ user_inf.user_key }}";
               {% if request.user.is_authenticated %}
+                  {% if user_inf %}
                   if (user === ""){
                       if (data.request_user[0].avatar !== null) document.getElementById('avatar').src = data.request_user[0].avatar;}
+                      {% else %}
+                          console.log(document.getElementsByTagName('header'));
+                        $('#header_check_activ').html('Не активен');
+                      {% endif %}
               {% endif %}
                   if (user !== ""){
                         if ("{{ user_inf.avatar }}" !== "None") document.getElementById('avatar').src = "{{ user_inf.avatar }}";}
