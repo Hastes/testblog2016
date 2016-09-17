@@ -135,9 +135,11 @@ def add_rep_user(request,id_user):
         return HttpResponse('')
     if id_user == str(request.user.id):
         return HttpResponse('ЧСВ')
+    instance = UserProf.objects.get(user_key=id_user)
     content_type = ContentType.objects.get_for_model(UserProf)
     try:
         like_generic = Likes.objects.get(content_type=content_type,user_id=auth.get_user(request).id,object_id=id_user)
+        instance.reputation -=1
         like_generic.delete()
     except ObjectDoesNotExist:
         like_generic = Likes.objects.create(content_type=content_type,
@@ -145,7 +147,9 @@ def add_rep_user(request,id_user):
                                             object_id=id_user,
                                             like=True
                                             )
-    return HttpResponse(Likes.objects.filter(content_type=content_type,object_id=id_user).count())
+        instance.reputation +=1
+    instance.save()
+    return HttpResponse(instance.reputation)
 
 # def likepost(request, article_id):
 #     if not request.session.get('has_liked'+article_id, False):

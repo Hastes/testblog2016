@@ -30,6 +30,7 @@ class UserProfSerializer(ModelSerializer):
             'user_key',
             'rank_name',
             'get_count_lk',
+            'reputation',
             'avatar',
         ]
     def get_user_key(self,obj):

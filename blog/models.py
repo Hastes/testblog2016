@@ -110,13 +110,14 @@ class UserProf(models.Model):
     # heigth_field = models.IntegerField(null=True,default=0)
     user_key = models.OneToOneField(User,primary_key=True,related_name="user_prof")
     rank_name = models.CharField(max_length=10,default='НОУНЕЙМ')
+    reputation = models.IntegerField(default=0)
 
     def __unicode__(self):
         return str(self.user_key.username)
     def __str__(self):
         return str(self.user_key.username)
     class Meta:
-        ordering = ['-user_key']
+        ordering = ['-reputation']
 
 class NewsProfile(models.Model):
     key = models.ForeignKey(UserProf)

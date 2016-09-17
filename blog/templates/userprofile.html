@@ -5,7 +5,7 @@
     <header>
         <h2 data-title="{{ user.username }}">{{ user.username }}</h2>
         <p>Звание - <a href="" style="color:#080808">{{ user_inf.rank_name }}</a></p>
-        <p>Репутация - <a href="" style="color:#080808" id="rep_user">{{ user_inf.get_count_lk }}</a></p>
+        <p>Репутация - <a href="" style="color:#080808" id="rep_user">{{ user_inf.reputation }}</a></p>
         {% if visible %}
         <p><button id="btn_rep" onclick="add_rep_user({{ user.id }})" class="button fit">Топ узер ин зе ворлд</button></p>
             {% if request.user.username == user.username %}
