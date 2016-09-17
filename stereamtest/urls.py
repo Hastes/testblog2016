@@ -38,7 +38,8 @@ urlpatterns = [
     url(r'^created/post/$',views.created_post,name='created_post'),
     url(r'^messagelike/(\d+)/$', views.message_like,name="message_like"),
     url(r'^deleteallmessage/$',views.delete_message,name="del_mes"),
-    url(r'^user_profile/(?P<username>[\w-]+)/$',views.userprofile,name='userprofile'),
+    url(r'^user_profile/(?P<username>\w+)/$',views.userprofile,name='userprofile'),
+    url(r'^user_profile/settings/(?P<username>\w+)/$',views.usersettings,name='usersettings'),
     url(r'^user_profile/(\d+)/add_rep/$',views.add_rep_user,name='user_add_rep'),
     url(r'^blog/',include("blog.API.urls",namespace='blog_API')),
     url(r'^users_section/$',views.users_section, name="users_section"),
@@ -47,6 +48,7 @@ urlpatterns = [
     url(r'^english_get/(\d+)/$',views.english_get),
     url(r'^games/',include("games.urls"),name='games'),
     url(r'^alertpost/$', pusher.message,name="alertpost"),
+
 ]
 from . import settings
 import os

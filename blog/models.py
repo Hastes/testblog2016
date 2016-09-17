@@ -105,7 +105,7 @@ class UserProf(models.Model):
     #     if filesize > limit*1024:
     #         raise ValidationError("Максимальный размер изображения %sKB" % str(limit))
 
-    avatar = ImageField(verbose_name="Аватар",blank=True,null=True,manual_crop="")
+    avatar = ImageField(verbose_name="Аватар",null=True,manual_crop="")
     # width_field = models.IntegerField(null=True,default=0)
     # heigth_field = models.IntegerField(null=True,default=0)
     user_key = models.OneToOneField(User,primary_key=True,related_name="user_prof")

@@ -86,6 +86,14 @@ def front(request,page_number=1):
         objects = Post.objects.filter(title__icontains=search)
     current_page = Paginator(objects,count_page)
     return render(request,'posts.html',{'objects':current_page.page(page_number)})
+def usersettings(request, username):
+    user = get_object_or_404(User, username=username)
+    formimg = UserSettingsForm(request.POST)
+    if formimg.is_valid():
+            formimg = formimg.save(commit=False)
+            formimg.user_key = user
+            formimg.save()
+    return HttpResponseRedirect('/user_profile/'+username)
 
 def userprofile(request,username):
     user = get_object_or_404(User,username=username)
@@ -103,13 +111,10 @@ def userprofile(request,username):
     if user.username == request.user.username:
         form_news = AddNewsProfile(request.POST or None)
         formimg = UserSettingsForm(request.POST or None,instance=user_inf)
-        if form_news.is_valid() & formimg.is_valid():
+        if form_news.is_valid():
             form = form_news.save(commit=False)
             form.key = user_inf
             form.save()
-            formimg = formimg.save(commit=False)
-            formimg.user_key = user
-            formimg.save()
             return HttpResponseRedirect(request.get_full_path())
     else:
         form_news = None

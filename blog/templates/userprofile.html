@@ -12,7 +12,7 @@
                 <div>
                     <div class="spoiler_links"><i><p>Настройки</p></i></div>
                     <div class="spoiler_body">
-                        <form method="POST">{% csrf_token %}
+                        <form method="POST" action="{% url 'usersettings' user.username %}">{% csrf_token %}
                         {{ formimg.media }}
                         {{ formimg.as_p }}
                         <p><button id="btn_rep" type="submit" >Изменить аватар</button></p>
