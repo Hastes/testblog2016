@@ -23,6 +23,30 @@
 		display: block;
 	}
 
+	section ul li article header{
+	 white-space: nowrap; /* Отменяем перенос текста */
+    overflow: hidden; /* Обрезаем содержимое */
+    padding: 5px; /* Поля */
+    background: #f4f4f4; /* Цвет фона */
+    position: relative; /* Относительное позиционирование */
+
+	}
+	section ul li article header h3:after{
+	content: ''; /* Выводим элемент */
+    position: absolute; /* Абсолютное позиционирование */
+    right: 0; top: 0; /* Положение элемента */
+    width: 40px; /* Ширина градиента*/
+    height: 100%; /* Высота родителя */
+    /* Градиент */
+    background: -moz-linear-gradient(left, rgba(244,244,244, 0.13), #f4f4f4 100%);
+    background: -webkit-linear-gradient(left, rgba(244,244,244, 0.13), #f4f4f4 100%);
+    background: -o-linear-gradient(left, rgba(244,244,244, 0.13), #f4f4f4 100%);
+    background: -ms-linear-gradient(left, rgba(244,244,244, 0.13), #f4f4f4 100%);
+    background: linear-gradient(to right, rgba(244,244,244, 0.13), #f4f4f4 100%);
+	}
+
+}
+
 	body {
 		line-height: 1;
 	}
@@ -3276,26 +3300,50 @@
 			display: block;
 			width: 4.5em;
 			border-radius: 30px;
-
+			-moz-transition: -moz-transform 0.2s ease-out;
+			-webkit-transition: -webkit-transform 0.2s ease-out;
+			-ms-transition: -ms-transform 0.2s ease-out;
+			transition: transform 0.2s ease-out;
+			transition: 1s;
 		}
 		#intro .logo img:hover {
-			transition: 1s;
-			border-radius: 5px;
-			/*-webkit-filter: blur(1px);  Chrome, Safari, Opera */
-
-		}
-		#intro .logo img:not(:hover) {
-			transition: 2s;
-			border-radius: 30px;
+			border-radius: 0px;
+			-moz-transform: scale(1.05);
+			-webkit-transform: scale(1.1);
+			-ms-transform: scale(1.1);
+			transform: scale(1.1);
 		}
 
 
 
+
+	/*#intro header h2 {*/
+		/*font-size: 2em;*/
+		/*font-weight: 900;*/
+	/*}*/
 	#intro header h2 {
-		font-size: 2em;
-		font-weight: 900;
+    overflow: hidden; /* Обрезаем содержимое */
+    padding: 5px; /* Поля */
+	font-weight: 100;
+	font-size: 2em;
+    position: relative; /* Относительное позиционирование */
+		transition: 3s;
+   }
+   	#intro header h2:after {
+    content: ''; /* Выводим элемент */
+    position: absolute; /* Абсолютное позиционирование */
+    right: 0; top: 0; /* Положение элемента */
+    width: 40px; /* Ширина градиента*/
+    height: 100%; /* Высота родителя */
+    /* Градиент */
+    background: -moz-linear-gradient(left, rgba(244,244,244, 0.13), #f4f4f4 100%);
+    background: -webkit-linear-gradient(left, rgba(244,244,244, 0.13), #f4f4f4 100%);
+    background: -o-linear-gradient(left, rgba(244,244,244, 0.13), #f4f4f4 100%);
+    background: -ms-linear-gradient(left, rgba(244,244,244, 0.13), #f4f4f4 100%);
+    background: linear-gradient(to right, rgba(244,244,244, 0.13), #f4f4f4 100%);
 	}
-
+	#intro header h2:hover {
+   }
 	#intro header p {
 		font-size: 0.8em;
 	}
