@@ -9,8 +9,7 @@
 		<title>{{ objects.title }} - 2K16</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
-         <script src="/static/assets/js/jquery.min.js"></script>
-        <script src="/static/assets/js/jquery.min.js"></script>
+		<script src="/static/assets/js/jquery.min.js"></script>
         <script src="/static/assets/js/skel.min.js"></script>
         <script src="/static/assets/js/util.js"></script>
         <script src="/static/WOW/dist/wow.min.js"></script>
@@ -18,7 +17,6 @@
         <script src="/static/assets/js/main.js"></script>
 		<!--[if lte IE 8]><script src="assets/js/ie/html5shiv.js"></script><![endif]-->
 		<link rel="stylesheet" href="/static/assets/css/main.css" />
-        <link rel="stylesheet" href="/static/WOW/css/libs/animate.css">
 		<!--[if lte IE 9]><link rel="stylesheet" href="assets/css/ie9.css" /><![endif]-->
 		<!--[if lte IE 8]><link rel="stylesheet" href="assets/css/ie8.css" /><![endif]-->
 	</head>
@@ -51,13 +49,9 @@
 							</ul>
 						</nav>
 					</header>
-
-				<!-- Menu -->
-					<section id="menu">
-                         {% include 'side_menu.html' %}
-					</section>
-
-				<!-- Main -->
+                    <section id="menu">
+                        {% include 'side_menu.html' %}
+                    </section>
 					<div id="main">
 
 						<!-- Post -->
@@ -80,9 +74,7 @@
 										<li><a href="#botDiv" class="icon fa-comment">{{ comments.count }}</a></li>
                                         <!-- Put this div tag to the place, where the Like block will be -->
                                         <li><div id="{{ objects.id }}"></div>
-                                            <script type="text/javascript">
-                                                        VK.Widgets.Like("{{ objects.id }}", {redesign: 1, type: "full", height: 30});
-                                            </script></li>
+                                            </li>
 									</ul>
 								</footer>
 
@@ -121,28 +113,7 @@
 
 			</div>
 
-		<!-- Scripts -->
-			<script src="/static/assets/js/jquery.min.js"></script>
-			<script src="/static/assets/js/skel.min.js"></script>
-			<script src="/static/assets/js/util.js"></script>
-			<!--[if lte IE 8]><script src="assets/js/ie/respond.min.js"></script><![endif]-->
-			<script src="/static/assets/js/main.js"></script>
-    <script type="text/javascript">
-          VK.init({
-            apiId: ВАШ_API,
-            onlyWidgets: true
-          });
-        </script>
-        <script type="text/javascript">
-
-        $('a[href^="#"]').click(function(){
-        //Сохраняем значение атрибута href в переменной:
-        var target = $(this).attr('href');
-        $('html, body').animate({scrollTop: $(target).offset().top}, 500);
-        return false;
-        });
-
-    </script>
+    
     <script>
         function postlike(post_id){
                   var obj= document.getElementById('like_id'+post_id);
