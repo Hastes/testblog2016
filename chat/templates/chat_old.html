@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% block content %}
+    Ваше имя:
+    <p><input id="name" ></p>
+    Сообщение:
+    <p><input id="message" type="text"></p>
+    <button id="btnSubmit">Отправить</button>
+<div id="msgArea"></div>
+<script type="application/javascript">
+
+$(document).ready(function(){
+    var webSocket = new WebSocket('ws://' + window.location.host + '/chat/index');
+    var elementMessage = $('#message')
+    var msgArea = $('#msgArea')
+    var anonName = $('#name')
+
+
+    webSocket.onmessage = function(message) {
+        var data = JSON.parse(message.data)
+        msgArea.prepend('<p><strong>'+ data.name + '</strong>: ' + data.text+ '</p>')
+    }
+    $('#btnSubmit').click(function(e) {
+       // webSocket.send("Имя:"+anonName.val()+ "\nСообщение:"+elementMessage.val())
+        var msg = {
+        type: "message",
+        text: elementMessage.val(),
+        name: anonName.val(),
+        date: Date.now()
+        };
+        elementMessage.val('')
+        anonName.attr('disabled', true);
+        webSocket.send(JSON.stringify(msg));
+    })
+})
+</script>
+{% endblock %}

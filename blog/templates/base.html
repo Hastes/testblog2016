@@ -51,8 +51,10 @@
                         {% include 'side_menu.html' %}
                     </section>
 
+
 				<!-- Main -->
 					<div id="main">
+
                         {% block title_offtop %}
                         {% endblock %}
 						<!-- Post -->
@@ -89,11 +91,15 @@
 							</section>
                         {% endblock %}
 						<!-- Mini Posts -->
-
+                        <div>
+                    <div class="spoiler_links"><center><h2>АНОНИМНЫЙ ЧАТИК</h2></center></div>
+                    <div class="spoiler_body"><center><section id="chat">{% include 'chat.html' %}</section></center></div>
+                        </div>
 						<!-- Posts List -->
 							{% include 'users_section.html' %}
 
 						<!-- About -->
+
 							<section class="blurb">
 								<h2>About</h2>
 								<p>Как мне попасть в топ? Очень просто - набрать репутацию,
@@ -120,9 +126,19 @@
 			</div>
 
 		<!-- Scripts -->
+                <style type="text/css">
+                .links {cursor: pointer;}
+                .spoiler_body {display:none;}
+                .spoiler_links {cursor:pointer;}
+                </style>
 
-
-            <script type="text/javascript">
+                <script type="text/javascript">
+                $(document).ready(function(){
+                    $('.spoiler_links').click(function(){
+                        $(this).parent().children('div.spoiler_body').toggle('normal');
+                        return false;
+                    });
+                });
                 function add_rep_user(user_id){
                     var btn = document.getElementById('btn_rep');
                     $('#btn_rep').fadeOut();
