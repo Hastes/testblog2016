@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block content %}
+<div id="msgArea">
+    <textarea id="message"></textarea>
+    <button id="btnSubmit">Отправить</button>
+</div>
+<script type="application/javascript">
+
+    $(document).ready(function(){
+    var msgArea = $('#msgArea')
+    console.log(msgArea)
+    var elementMessage = $('#message')
+    var webSocket = new WebSocket('ws://' + window.location.host + '/chat/index');
+    webSocket.onmessage = function(message) {
+        var data = JSON.parse(message.data)
+        msgArea.append('<p><strong>'+ data.sender + '</strong>: ' + data.message + '</p>')
+    }
+    $('#btnSubmit').click(function(e) {
+        webSocket.send(elementMessage.val())
+    })
+})
+</script>
+{% endblock %}
