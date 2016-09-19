@@ -1,6 +1,7 @@
 from django.db import models
 from django.conf import settings
 from django.utils import timezone
+from django.contrib.auth.models import User
 # Create your models here.
 
 
@@ -17,3 +18,10 @@ class CommentGame(models.Model):
         return self.comment
     class Meta:
         ordering = ['-date']
+
+
+class Score2048(models.Model):
+    user = models.OneToOneField(User)
+    score_user = models.IntegerField(default=0)
+    class Meta:
+        ordering = ['-score_user']

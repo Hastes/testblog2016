@@ -20,16 +20,18 @@
       </div> -->
     </div>
 
-    <div class="above-game">
-      <p class="game-intro">Join the numbers and get to the <strong>2048 tile!</strong></p>
-      <a class="restart-button">New Game</a>
-    </div>
+
 
   <div class="scores-container">
         <div class="score-container">116<div class="score-addition">+116</div></div>
         <div class="best-container">116</div>
       </div>
-    
+
+  <div class="above-game">
+      <p class="game-intro">Join the numbers and get to the <strong>2048 tile!</strong></p>
+      <a class="restart-button">New Game</a>
+    </div>
+
 
     <div class="game-container">
       <div class="game-message">
@@ -72,6 +74,16 @@
 
       <div class="tile-container"><div class="tile tile-8 tile-position-2-1 tile-new"><div class="tile-inner">8</div></div><div class="tile tile-2 tile-position-2-4 tile-new"><div class="tile-inner">2</div></div><div class="tile tile-16 tile-position-3-1 tile-new"><div class="tile-inner">16</div></div><div class="tile tile-4 tile-position-3-2 tile-new"><div class="tile-inner">4</div></div><div class="tile tile-4 tile-position-4-1 tile-new"><div class="tile-inner">4</div></div><div class="tile tile-4 tile-position-4-2 tile-new"><div class="tile-inner">4</div></div><div class="tile tile-16 tile-position-4-3 tile-new"><div class="tile-inner">16</div></div><div class="tile tile-2 tile-position-4-4 tile-new"><div class="tile-inner">2</div></div></div>
     </div>
+  {% if recordmans %}
+    <div class="recordmans">
+     <p>РЕКОРДЫ:</p>
+        <ul>
+        {% for obj in recordmans %}
+            <li><b>{{ forloop.counter }}) {{ obj.user }}</b> - {{ obj.score_user }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
 
     <p class="game-explanation">
       <strong class="important">Как играть:</strong> Используйте <strong>стрелки </strong> чтобы двигать блоки. <strong>R</strong> - РЕСТАРТ.
@@ -119,11 +131,24 @@
     (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
     m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
     })(window,document,"script","//www.google-analytics.com/analytics.js","ga");
-
+    console.log(ga.q);
     ga("create", "UA-42620757-2", "gabrielecirulli.github.io");
     ga("send", "pageview");
-  </script>
+      function CheckMs(datatest) {
+    $.ajax({
+    type:'POST',
+              url:'/games/2048/score/',
+              data:{
+                    score: datatest,
+                    csrfmiddlewaretoken: '{{ csrf_token }}'
+              },
+              success: function (data) {
+                  if (data) alert(data);
+              }
+        })
+}
 
+  </script>
 
 <iframe id="rufous-sandbox" scrolling="no" frameborder="0" allowtransparency="true" allowfullscreen="true" style="position: absolute; visibility: hidden; display: none; width: 0px; height: 0px; padding: 0px; border: none;" src="/static/2048_files/saved_resource.html"></iframe></body>
 {% endblock content %}

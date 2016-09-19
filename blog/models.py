@@ -111,6 +111,7 @@ class UserProf(models.Model):
     user_key = models.OneToOneField(User,primary_key=True,related_name="user_prof")
     rank_name = models.CharField(max_length=10,default='НОУНЕЙМ')
     reputation = models.IntegerField(default=0)
+    #score2048 = models.IntegerField(blank = True, null = True)
 
     def __unicode__(self):
         return str(self.user_key.username)
@@ -142,6 +143,7 @@ class ImagePostPicture(models.Model):
     key = models.OneToOneField(Post,related_name="img_post")
     image = ImageField(verbose_name="Постер(не обязательно)",blank=True,manual_crop="")
     text = models.TextField()
+
 
 
 #User._meta.get_field('username').max_length = 11

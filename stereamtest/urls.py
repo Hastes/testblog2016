@@ -50,7 +50,6 @@ urlpatterns = [
     url(r'^games/',include("games.urls"),name='games'),
     url(r'^alertpost/$', pusher.message,name="alertpost"),
     url(r'^chats/$',front_chat,name="chat"),
-
 ]
 from . import settings
 import os
