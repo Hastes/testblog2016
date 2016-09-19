@@ -31,6 +31,7 @@ webSocket.onmessage = function(message) {
       var data = JSON.parse(message.data)
       if (date_check !== data.message.date){
       $('<div class="message new"><figure class="avatar"><img src="http://s3-us-west-2.amazonaws.com/s.cdpn.io/156381/profile/profile-80_4.jpg" /></figure>' + data.message.text+ '</div>').appendTo($('.mCSB_container')).addClass('new');
+      updateScrollbar();
       }
   }
 function insertMessage() {
