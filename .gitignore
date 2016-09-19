@@ -25,7 +25,6 @@ var/
 .installed.cfg
 *.egg
 
-.idea/
 
 # PyInstaller
 #  Usually these files are written by a python script from a template
@@ -84,6 +83,7 @@ celerybeat-schedule
 # virtualenv
 venv/
 ENV/
+myvenv/
 
 # Spyder project settings
 .spyderproject

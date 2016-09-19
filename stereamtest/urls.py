@@ -16,6 +16,7 @@ Including another URLconf
 from django.conf.urls import url,include
 from django.contrib import admin
 from blog import views,pusher
+from chat.views import front_chat
 
 
 admin.site.site_header = "2K16 | Как ты сюда попал?"
@@ -48,6 +49,7 @@ urlpatterns = [
     url(r'^english_get/(\d+)/$',views.english_get),
     url(r'^games/',include("games.urls"),name='games'),
     url(r'^alertpost/$', pusher.message,name="alertpost"),
+    url(r'^chats/$',front_chat,name="chat"),
 
 ]
 from . import settings

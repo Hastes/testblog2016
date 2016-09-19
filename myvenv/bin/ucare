@@ -1,0 +1,10 @@
+#!/home/hs/djangoprojects/testblog2016/myvenv/bin/python3.4
+# EASY-INSTALL-ENTRY-SCRIPT: 'pyuploadcare==2.0.1','console_scripts','ucare'
+__requires__ = 'pyuploadcare==2.0.1'
+import sys
+from pkg_resources import load_entry_point
+
+if __name__ == '__main__':
+    sys.exit(
+        load_entry_point('pyuploadcare==2.0.1', 'console_scripts', 'ucare')()
+    )

@@ -25,11 +25,22 @@ SECRET_KEY = 'r-$*m)zk3c-tjenrucg0p!6end1ez7x0uv$o!cz3ww7m#)8=p&'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+# Application definition
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "asgi_redis.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [os.environ.get('REDIS_URL', 'redis://localhost:6379')],
+        },
+        "ROUTING": "stereamtest.routing.channel_routing",
+    },
+}
 
 # Application definition
 LIBRALES_APPS = [
     'rest_framework',
     'pyuploadcare.dj',
+    'channels',
 ]
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -40,6 +51,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'blog',
     'games',
+    'chat',
 ] + LIBRALES_APPS
 
 UPLOADCARE = {
@@ -91,7 +103,7 @@ DATABASES = {
         'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'testblog2016',
-        'USER': 'postgres',
+        'USER': 'hastes',
         'PASSWORD': '5sl9u8jp2',
         'HOST': 'localhost',
         'PORT': '',
