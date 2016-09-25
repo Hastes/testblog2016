@@ -79,7 +79,7 @@
      <p>РЕКОРДЫ:</p>
         <ul>
         {% for obj in recordmans %}
-            <li><b>{{ forloop.counter }}) {{ obj.user }}</b> - {{ obj.score_user }}</li>
+            <li><b>{{ forloop.counter }}) <a href="{% url 'userprofile' obj.user %}">{{ obj.user }}</a></b> - {{ obj.score_user }}</li>
             {% endfor %}
         </ul>
     </div>

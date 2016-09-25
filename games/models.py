@@ -25,3 +25,5 @@ class Score2048(models.Model):
     score_user = models.IntegerField(default=0)
     class Meta:
         ordering = ['-score_user']
+
+

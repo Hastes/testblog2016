@@ -118,7 +118,7 @@ class UserProf(models.Model):
     def __str__(self):
         return str(self.user_key.username)
     class Meta:
-        ordering = ['-reputation']
+        ordering = ['-reputation','-user_key']
 
 class NewsProfile(models.Model):
     key = models.ForeignKey(UserProf)
@@ -143,6 +143,15 @@ class ImagePostPicture(models.Model):
     key = models.OneToOneField(Post,related_name="img_post")
     image = ImageField(verbose_name="Постер(не обязательно)",blank=True,manual_crop="")
     text = models.TextField()
+
+class MessageForAdmin(models.Model):
+    message_admin = models.TextField(max_length=1000)
+    date_message_admin = models.DateField(auto_now=True)
+
+    def __unicode__(self):
+        return self.message_admin
+    def __str__(self):
+        return self.message_admin
 
 
 

@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block myprof %}
 <section id="intro">
-    <a href="{{ request.build_absolute_uri }}" class="logo"><img id="avatar" src="/static/images/av_undef.png" alt="" /></a>
+    <a href="" class="logo"><img onclick="return popup_avatar()" id="avatar" src="/static/images/av_undef.png" alt="" /></a>
     <header>
         <h2 data-title="{{ user.username }}">{{ user.username }}</h2>
         <p>Звание - <a href="" style="color:#080808">{{ user_inf.rank_name }}</a></p>

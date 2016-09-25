@@ -25,3 +25,13 @@ def score(request):
             return HttpResponse('Ваш новый рекорд %s' % score)
     return HttpResponse()
 
+def save_canvas(request):
+    if request.POST:
+        clickX = request.POST.get('clickX',False)
+        clickY = request.POST.get('clickY',False)
+        clickDrag = request.POST.get('clickDrag',False)
+    return HttpResponse()
+
+def painters(request):
+    return render_to_response('painters.html',{})
+

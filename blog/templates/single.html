@@ -116,12 +116,6 @@
 
 			</div>
 
-    <script type="text/javascript">
-          VK.init({
-            apiId: ВАШ_API,
-            onlyWidgets: true
-          });
-        </script>
         <script type="text/javascript">
 
         $('a[href^="#"]').click(function(){
@@ -131,24 +125,22 @@
         return false;
         });
 
-    </script>
-    <script>
         function postlike(post_id){
-                  var obj= document.getElementById('like_id'+post_id);
-                  obj.style.cssText =   "pointer-events: none;";
-                  $("#like_id"+post_id).fadeOut();
-                  $.ajax({
-                      url:'/likepost/'+post_id,
-                      success: function(data){
-                          if(data === ''){
-                              window.location.href = "{% url 'reg' %}"
-                          }
-                          $("#like_id"+post_id).html(data);
-                          obj.style.cssText = "pointer-events: auto ";
-                          $("#like_id"+post_id).fadeIn()
+              var obj= document.getElementById('like_id'+post_id);
+              obj.style.cssText =   "pointer-events: none;";
+              $("#like_id"+post_id).fadeOut();
+              $.ajax({
+                  url:'/likepost/'+post_id,
+                  success: function(data){
+                      if(data === ''){
+                          window.location.href = "{% url 'reg' %}"
                       }
-                  })
-                  };
-              </script>
+                      $("#like_id"+post_id).html(data);
+                      obj.style.cssText = "pointer-events: auto ";
+                      $("#like_id"+post_id).fadeIn()
+                  }
+              })
+              }
+        </script>
 	</body>
 </html>

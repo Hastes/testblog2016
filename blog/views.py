@@ -1,11 +1,11 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse,HttpResponseRedirect,HttpRequest
-from .models import Post, Comment, Offtop_Comment, Likes, UserProf,English,NewsProfile,ImagePostPicture
+from .models import Post, Comment, Offtop_Comment, Likes, UserProf,English,NewsProfile,ImagePostPicture,MessageForAdmin
 from django.core.paginator import Paginator
 from ipware.ip import get_ip
 from  django.contrib.auth.forms import UserCreationForm,AuthenticationForm
 from django.contrib.auth import authenticate, login, logout
-from django.contrib import auth
+from django.contrib import auth,messages
 from django.contrib.auth.middleware import get_user
 from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
@@ -13,6 +13,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from  django.core import serializers
 from django.contrib import sessions
 from django.http import Http404
+from django.db import IntegrityError
 from django.utils.text import slugify
 from blog.API.serializers import Offtop_CommentSerializer, UserProfSerializer,EngilshSerializer
 import json
@@ -192,9 +193,12 @@ def register_user(request):
     if request.POST:
         user_form = UserCreateForm(request.POST)
         if user_form.is_valid():
-            user_form.save()
-            login(request, authenticate(username=request.POST['username'], password=request.POST['password1']))
-            return HttpResponseRedirect('/')
+            try:
+                user_form.save()
+                login(request, authenticate(username=request.POST['username'].lower(), password=request.POST['password1']))
+                return HttpResponseRedirect('/')
+            except IntegrityError:
+                messages.add_message(request,messages.ERROR, "Пользователь с таким именем уже существует")
         else:
             args['form']= user_form
     return render(request,'register.html',args)
@@ -261,6 +265,13 @@ def english_get(request,pk):
     args['eng']= EngilshSerializer(obj).data
     return HttpResponse(json.dumps(args),content_type="application/json")
 
+
+def sendmessageforadmin(request):
+    message = request.POST.get('messageforadmin',False)
+    if (message != False) & (request.session.get('already', False) == False):
+        MessageForAdmin.objects.create(message_admin = message)
+        request.session['already'] = True
+    return HttpResponse()
 
 def english_met(request):
     return render(request,'english.html',{'eng':English.objects.all()})

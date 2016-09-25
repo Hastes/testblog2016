@@ -5,7 +5,7 @@ import json
 from channels.channel import Group
 
 def ws_connect(message):
-    Group('chat').add(message.reply_channel)
+    Group('painters').add(message.reply_channel)
 
 def ws_message(message):
     try:
@@ -13,9 +13,8 @@ def ws_message(message):
     except ValueError:
        print("ws message isn't json text=%s", message['text'])
        return
-    Group('chat').send({'text': json.dumps({'message': data,
+    Group('painters').send({'text': json.dumps({'message': data,
                                             'sender': message.reply_channel.name})}),
-    print(message.reply_channel.name)
 
 def ws_disconnect(message):
-    Group('chat').discard(message.reply_channel)
+    Group('painters').discard(message.reply_channel)

@@ -20,6 +20,8 @@ from chat.views import front_chat
 
 
 admin.site.site_header = "2K16 | Как ты сюда попал?"
+
+
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^$', views.front,name='posts'),
@@ -50,7 +52,10 @@ urlpatterns = [
     url(r'^games/',include("games.urls"),name='games'),
     url(r'^alertpost/$', pusher.message,name="alertpost"),
     url(r'^chats/$',front_chat,name="chat"),
+    url(r'^sendmessageforadmin/$',views.sendmessageforadmin, name='messageforadmin')
 ]
+
+
 from . import settings
 import os
 from django.conf.urls.static import static

@@ -77,7 +77,7 @@
                         {% block myprof %}
 							<section id="intro">
                                 {% if request.user.is_authenticated %}
-								<a href="{{ request.build_absolute_uri }}" class="logo"><img id="avatar" src="/static/images/av_undef.png" alt="" /></a>
+								<a href="" class="logo"><img onclick="return popup_avatar()" id="avatar" src="/static/images/av_undef.png" alt="" /></a>
                                 {% endif %}
 								<header>
 									<h2>Добро пожаловать</h2>
@@ -104,10 +104,38 @@
 								<h2>About</h2>
 								<p>Как мне попасть в топ? Очень просто - набрать репутацию,
                                     чем больше людей вас уважают - тем вы выше в топе.</p>
-                                <ul class="actions">
-									<li><a href="#" class="button">Learn More</a></li>
+                                {% if request.session.already == true %}
+                                <ul id="actions" class="actions">
+                                    <li><a href="javascript:PopUpShow()" class="button">Пожелания сайту</a></li>
 								</ul>
+                                {% endif %}
 							</section>
+                            {% if request.session.already == true %}
+                            <section id="popup">
+                                <div class="b-popup" id="popup1">
+                                    <div class="b-popup-content">
+                                        <h3>Ваше предложение:</h3>
+                                        <p><textarea style="resize: vertical" name="message" id="messageforadmin"></textarea></p>
+                                        <p><input onclick="return sendmessageforAdmin()" type="submit" vulue="Отправить"></p>
+                                    </div>
+                                </div>
+                                <script type="application/javascript">
+                                    $(document).ready(function(){
+                                        //Скрыть PopUp при загрузке страницы
+                                        PopUpHide();
+                                    });
+                                    //Функция отображения PopUp
+                                    function PopUpShow(){
+                                        $("#popup1").show();
+                                        $("#actions").hide()
+                                    }
+                                    //Функция скрытия PopUp
+                                    function PopUpHide(){
+                                        $("#popup1").hide();
+                                    }
+                                </script>
+                            </section>
+                            {% endif %}
 
 						<!-- Footer -->
 							<section id="footer">
@@ -133,6 +161,38 @@
                 </style>
 
                 <script type="text/javascript">
+                    var flag;
+                    function popup_avatar() {
+                        var av = $('#avatar');
+                        var avDef = "/static/images/av_undef.png";
+                        if (av.attr("src") !== avDef){
+                        if (flag !== true){
+                            av.css({width:'220%'});
+                            flag = true
+                            }
+                        else {av.css({width:'100%'}); flag = false}
+                        }
+                        return false;
+                    }
+
+                function sendmessageforAdmin(){
+                    var message = $('#messageforadmin');
+                    if (message.val() === ""){
+                        return false;
+                    }
+                    $.ajax({
+                        type: "POST",
+                        url: "{% url 'messageforadmin' %}",
+                        data:{
+                            csrfmiddlewaretoken: '{{ csrf_token }}',
+                            messageforadmin: message.val()
+                        },
+                        success: function () {
+                            $('#popup1').hide()
+                            alert("Ваше предложение отправлено")
+                        }
+                    })
+                }
                 $(document).ready(function(){
                     $('.spoiler_links').click(function(){
                         $(this).parent().children('div.spoiler_body').toggle('normal');
@@ -148,7 +208,6 @@
                           if(data === ''){
                               window.location.href = "{% url 'reg' %}"
                           }
-                          console.log(data)
                           $("#rep_user").html(data);
                       }
                   })

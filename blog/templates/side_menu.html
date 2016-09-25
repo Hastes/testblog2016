@@ -20,7 +20,7 @@
 {% if request.user.is_superuser %}
     <section>
     <h3><a href="/admin/" >Админ панель</a></h3><hr>
-    <h3><a href="/admin/" >Список пользователей</a></h3><hr>
+    <h3><a href="/admin/blog/messageforadmin/" >Пожелания пользователей</a></h3><hr>
     <h3><a href="#" onclick="post_mess()" >Оповещение для юзверей</a></h3><hr>
     <h3><a href="{% url 'created_post' %}" >Добавить статью</a></h3>
     </section>

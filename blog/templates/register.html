@@ -5,6 +5,11 @@
     <center><h2>Регистрация</h2></center>
     <form method="POST">
     {% csrf_token %}
+        {% if messages %}
+            {% for message in messages %}
+            <span>{{ message }}</span>
+            {% endfor %}
+        {% endif %}
         {{ form }}<br>
         <button type="submit">Зарегистрироваться</button>
     </form>
