@@ -129,11 +129,6 @@ p {
   margin-bottom: 10px;
   line-height: 1.65; }
 
-a {
-  color: #776e65;
-  font-weight: bold;
-  text-decoration: underline;
-  cursor: pointer; }
 
 strong.important {
   text-transform: uppercase; }

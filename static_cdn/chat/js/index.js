@@ -1,6 +1,7 @@
 
 var webSocket = new WebSocket('ws://' + window.location.host + '/chat/index');
 var date_check = ""
+
 var $messages = $('.messages-content'),
     d, h, m,
     i = 0;
