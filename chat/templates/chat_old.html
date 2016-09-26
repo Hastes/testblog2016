@@ -10,15 +10,15 @@
 
 $(document).ready(function(){
     var webSocket = new WebSocket('ws://' + window.location.host + '/chat/index');
-    var elementMessage = $('#message')
-    var msgArea = $('#msgArea')
-    var anonName = $('#name')
+    var elementMessage = $('#message');
+    var msgArea = $('#msgArea');
+    var anonName = $('#name');
 
 
     webSocket.onmessage = function(message) {
-        var data = JSON.parse(message.data)
+        var data = JSON.parse(message.data);
         msgArea.prepend('<p><strong>'+ data.name + '</strong>: ' + data.text+ '</p>')
-    }
+    };
     $('#btnSubmit').click(function(e) {
        // webSocket.send("Имя:"+anonName.val()+ "\nСообщение:"+elementMessage.val())
         var msg = {

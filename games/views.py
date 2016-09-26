@@ -1,4 +1,5 @@
-from django.shortcuts import render,render_to_response
+from django.shortcuts import render,render_to_response,get_object_or_404
+from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect,HttpResponse
 
 from .models import CommentGame, Score2048
@@ -8,9 +9,12 @@ from .forms import CommentGameForm
 
 def game2048(request):
     comments = CommentGame.objects.all()[:10:]
-    recordmans = Score2048.objects.all()[:10:]
+    recordmans = Score2048.objects.all()[:15:]
+    user = get_object_or_404(User, username = request.user)
     form = CommentGameForm(request.POST or None)
     if form.is_valid():
+        form = form.save(commit=False)
+        form.user = user
         form.save()
         return HttpResponseRedirect(request.get_full_path())
     return render(request,'2048.html',{'comments':comments,'form':form,'recordmans':recordmans})

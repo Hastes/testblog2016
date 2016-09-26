@@ -36,7 +36,7 @@
 <article class="post">
     <header>
         <div class="title">
-            <h2><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></h2>
+            <h2>{% if request.user.is_staff or request.user.is_superuser %}<a style="float: left; opacity: 0.3;" href="{% url 'update_article' post.id %}"><div class="icon fa-pencil"></div></a>{% endif %}<a href="{{ post.get_absolute_url }}">{{ post.title }}</a>  </h2>
             <p>{{ post.about }}</p>
         </div>
         <div class="meta">

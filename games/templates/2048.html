@@ -90,9 +90,11 @@
     </p><hr>
       {% if request.user.is_authenticated %}
       <form method="POST">
-           {{ form.as_p }}
           {% csrf_token %}
+          <form method="POST">
+          <p><textarea cols="40" id="id_comment" maxlength="500" name="comment" rows="10" required=""></textarea></p>
           <input type="submit" onclick="" value="Отправить">
+      </form>
       </form>
 
       <hr>{% endif %}

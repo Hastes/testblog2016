@@ -21,12 +21,13 @@
     <section>
     <h3><a href="/admin/" >Админ панель</a></h3><hr>
     <h3><a href="/admin/blog/messageforadmin/" >Пожелания пользователей</a></h3><hr>
-    <h3><a href="#" onclick="post_mess()" >Оповещение для юзверей</a></h3><hr>
+    <h3><a href="#" onclick="post_mess()" >Оповещение для юзернеймов</a></h3><hr>
     <h3><a href="{% url 'created_post' %}" >Добавить статью</a></h3>
     </section>
     {% else %}
         {% if request.user.is_authenticated %}
             <section>
+            {% if request.user.is_staff %}<h3><a href="{% url "created_post" %}" >Добавить статью</a></h3><hr>{% endif %}
             <h3><a href="{% url "offtop" %}" >ОФФТОП</a></h3><hr>
             <h3><a href="{% url "english_met" %}" >АНГЛИЙСКИЙ</a></h3><hr>
             <h3><a href="{% url "2048" %}" >2048 GAME</a></h3>

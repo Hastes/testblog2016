@@ -45,13 +45,20 @@ class UserSettingsForm(forms.ModelForm):
 from django.contrib.auth.forms import UserCreationForm
 
 class UserCreateForm(UserCreationForm):
-    username = forms.RegexField(label="Username", max_length=20,
+    username = forms.RegexField(label="Username", max_length=20,min_length=4,   
         regex=r'^(?i)[\w@]+$',
         help_text = "Обязательное поле. Не более 20 символов. Только буквы, цифры и символы @/_",
         error_messages = {
             'invalid': "Допустимы только буквы, числа и "
                          "символы @ _"})
     email = forms.EmailField(required=True)
+
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        username = self.cleaned_data.get('username')
+        if email and User.objects.filter(email=email).exclude(username=username).count():
+            raise forms.ValidationError(u'Пользователь с таким email уже существует')
+        return email
 
     class Meta:
         model = User

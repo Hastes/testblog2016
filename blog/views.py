@@ -73,6 +73,8 @@ def update_article(request, article_id=None):
     }
     return render(request,'created.html',args)
 
+
+
 def delete_article(request, article_id=None):
     if request.user.is_superuser:
         objects = get_object_or_404(Post, id=article_id)
@@ -87,6 +89,7 @@ def front(request,page_number=1):
         objects = Post.objects.filter(title__icontains=search)
     current_page = Paginator(objects,count_page)
     return render(request,'posts.html',{'objects':current_page.page(page_number)})
+
 def usersettings(request, username):
     user = get_object_or_404(User, username=username)
     formimg = UserSettingsForm(request.POST)
@@ -207,7 +210,7 @@ def login_user(request):
     args = {}
     args['form']= AuthenticationForm()
     if request.POST:
-        username = request.POST['username']
+        username = request.POST['username'].lower()
         password = request.POST['password']
         user = authenticate(username=username,password=password)
         if user is not None:
