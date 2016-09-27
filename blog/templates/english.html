@@ -17,21 +17,24 @@ function get_data(lesson_id){
     $.ajax({
         url:'/english_get/'+lesson_id+'/',
         success: function (data){
-            $("#body"+lesson_id).html('<div><a id="vocabulary" style="cursor: pointer" onclick="openlinks(this.id)">Vocabulary</a><br><div id="v" class="spoiler_body">' + data.eng.vocabulary+'</div>' +
-                    '</div>' +
-                    '<div><a id="story" style="cursor: pointer" onclick="openlinks(this.id)">Story</a><br><div class="spoiler_body">'+data.eng.story+'</div>' +
-                    '</div>' +
-                    '<div><a id="cultural_notes" style="cursor: pointer" onclick="openlinks(this.id)">Cultural notes</a><br><div class="spoiler_body">'+data.eng.cultural_notes+'</div>' +
-                    '</div>' +
-                    '<div></div><a id="action" style="cursor: pointer" onclick="openlinks(this.id)">Action</a><br><div class="spoiler_body">'+data.eng.action+'</div>' +
-                    '</div>').toggle('normal');
             //$('#v'+lesson_id) .html((data.eng.vocabulary).replace(/\n/g,"<br>")).toggle('normal');
+            $("#body"+lesson_id).html('<div><a id="vocabulary'+lesson_id+'" style="cursor: pointer" onclick="openlinks(this.id)">Vocabulary</a><br><div id="v" class="spoiler_body">' + data.eng.vocabulary+'</div>' +
+                    '</div>' +
+                    '<div><a id="story'+lesson_id+'" style="cursor: pointer" onclick="openlinks(this.id)">Story</a><br><div class="spoiler_body">'+data.eng.story+'</div>' +
+                    '</div>' +
+                    '<div><a id="cultural_notes'+lesson_id+'" style="cursor: pointer" onclick="openlinks(this.id)">Cultural notes</a><br><div class="spoiler_body">'+data.eng.cultural_notes+'</div>' +
+                    '</div>' +
+                    '<div></div><a id="action'+lesson_id+'" style="cursor: pointer" onclick="openlinks(this.id)">Action</a><br><div class="spoiler_body">'+data.eng.action+'</div>' +
+                    '</div>').toggle('normal');
         }
     });
 }
+
+
 function openlinks(id) {
+    var elem = document.getElementById(id);
     $('#'+id).parent().children('div.spoiler_body').toggle('normal');
-        return false;
+    return false;
 }
 </script>
 {% endblock %}
