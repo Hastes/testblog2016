@@ -128,7 +128,7 @@
                               msUTC = new Date(obj.created_date);
                               d = msUTC.getDate() + '-' + (msUTC.getMonth() + 1) + '-' + msUTC.getFullYear();
                               d2 = msUTC.getHours() + ':' + msUTC.getMinutes() + ':' + msUTC.getSeconds();
-                              $(anim + '<article id="'+obj.id+'" class="post">' + adminstyle + '<header><div class="title"><h2><a href="/user_profile/'+obj.author+'/">' + obj.author + '</a></h2> <p></p> </div> <div class="meta"> ' + d + '<br>' + d2 + '<a href="#" class="author"><span class="name"></span><img src="/static/images/av_undef.png" alt="" /></a></div></header><p>' + obj.message + '</p> <footer> <ul class="stats"> <li><a id="like_id" onclick="postlike()" class="icon fa-heart">' + obj.likes + '</a></li> </ul> </footer> </article>' + anim2).appendTo('#oft_add_com')
+                              $(anim + '<article id="'+obj.id+'" class="post">' + adminstyle + '<header><div class="title"><h2><a href="/user_profile/'+obj.author+'/">' + obj.author + '</a></h2> <p></p> </div> <div class="meta"> ' + d + '<br>' + d2 + '<a href="#" class="author"><span class="name"></span><img src="/static/images/av_undef.png" alt="" /></a></div></header><p>' + obj.message + '</p> <footer> <ul class="stats"></ul> </footer> </article>' + anim2).appendTo('#oft_add_com')
                               if (obj.author == 'admin') {
                                   document.getElementById(obj.id).style = 'border-color: #2ebaae;box-shadow: inset 0 0 0 1px #2ebaae;'
                               }
@@ -144,7 +144,7 @@
                              msUTC = new Date(lastObj.created_date);
                              var d = msUTC.getDate() + '-' + (msUTC.getMonth() + 1) + '-' + msUTC.getFullYear();
                              var d2 = msUTC.getHours() + ':' + msUTC.getMinutes() + ':' + msUTC.getSeconds();
-                             $('<div id="reload" class="wow bounceInRight"><article id="article" class="post"><header><div class="title"><h2><a href="/user_profile/'+lastObj.author+'/" >' + lastObj.author + '</a></h2> <p></p> </div> <div class="meta">'+d+'<br>'+d2+'<a href="#" class="author"><span class="name"></span><img src="/static/images/av_undef.png" alt="" /></a></div></header><p>' + lastObj.message + '</p> <footer>  <ul class="stats"> <li><a id="like_id" onclick="postlike('+lastObj.id+')" class="icon fa-heart">' + lastObj.likes + '</a></li> </ul> </footer> </article></div>').prependTo('#oft_add_com')
+                             $('<div id="reload" class="wow bounceInRight"><article id="article" class="post"><header><div class="title"><h2><a href="/user_profile/'+lastObj.author+'/" >' + lastObj.author + '</a></h2> <p></p> </div> <div class="meta">'+d+'<br>'+d2+'<a href="#" class="author"><span class="name"></span><img src="/static/images/av_undef.png" alt="" /></a></div></header><p>' + lastObj.message + '</p> <footer>  <ul class="stats"></ul> </footer> </article></div>').prependTo('#oft_add_com')
                              if (lastObj.author === 'admin'){
                                  document.getElementById('article').style = 'border-color: #2ebaae; box-shadow: inset 0 0 0 1px #2ebaae;'
                              }

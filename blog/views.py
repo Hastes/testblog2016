@@ -47,6 +47,7 @@ def created_post(request):
             instance_img = formimg.save(commit=False)
             instance_img.key = instance
             instance_img.save()
+            instance_img.save()
             return HttpResponseRedirect('/')
     else:
         raise Http404
