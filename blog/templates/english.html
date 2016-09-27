@@ -17,15 +17,19 @@ function get_data(lesson_id){
     $.ajax({
         url:'/english_get/'+lesson_id+'/',
         success: function (data){
+            var voc = data.eng.vocabulary.replace(/\n/g,"<br>");
+            var story = data.eng.story.replace(/\n/g,"<br>");
+            var culn = data.eng.cultural_notes.replace(/\n/g,"<br>");
+            var action = data.eng.action.replace(/\n/g,"<br>");
             //$('#v'+lesson_id) .html((data.eng.vocabulary).replace(/\n/g,"<br>")).toggle('normal');
-            $("#body"+lesson_id).html('<div><a id="vocabulary'+lesson_id+'" style="cursor: pointer" onclick="openlinks(this.id)">Vocabulary</a><br><div id="v" class="spoiler_body">' + data.eng.vocabulary+'</div>' +
+            $("#body"+lesson_id).html('<div><a id="vocabulary'+lesson_id+'" style="cursor: pointer" onclick="openlinks(this.id)">Vocabulary</a><br><div id="v" class="spoiler_body">' + voc+'</div>' +
                     '</div>' +
-                    '<div><a id="story'+lesson_id+'" style="cursor: pointer" onclick="openlinks(this.id)">Story</a><br><div class="spoiler_body">'+data.eng.story+'</div>' +
+                    '<div><a id="story'+lesson_id+'" style="cursor: pointer" onclick="openlinks(this.id)">Story</a><br><div class="spoiler_body">'+story+'</div>' +
                     '</div>' +
-                    '<div><a id="cultural_notes'+lesson_id+'" style="cursor: pointer" onclick="openlinks(this.id)">Cultural notes</a><br><div class="spoiler_body">'+data.eng.cultural_notes+'</div>' +
+                    '<div><a id="cultural_notes'+lesson_id+'" style="cursor: pointer" onclick="openlinks(this.id)">Cultural notes</a><br><div class="spoiler_body">'+culn+'</div>' +
                     '</div>' +
-                    '<div></div><a id="action'+lesson_id+'" style="cursor: pointer" onclick="openlinks(this.id)">Action</a><br><div class="spoiler_body">'+data.eng.action+'</div>' +
-                    '</div>').toggle('normal');
+                    '<div></div><a id="action'+lesson_id+'" style="cursor: pointer" onclick="openlinks(this.id)">Action</a><br><div class="spoiler_body">'+action+'</div>' +
+                    '</div>').toggle('normal')
         }
     });
 }
