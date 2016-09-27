@@ -6,12 +6,12 @@ var $messages = $('.messages-content'),
     d, h, m,
     i = 0;
 
-$(window).load(function() {
-  $messages.mCustomScrollbar();
-  setTimeout(function() {
-    fakeMessage();
-  }, 100);
-});
+// $(window).load(function() {
+//   $messages.mCustomScrollbar();
+//   setTimeout(function() {
+//     fakeMessage();
+//   }, 100);
+// });
 
 function updateScrollbar() {
   $messages.mCustomScrollbar("update").mCustomScrollbar('scrollTo', 'bottom', {
@@ -36,26 +36,26 @@ webSocket.onmessage = function(message) {
       }
   }
 function insertMessage() {
-  msg = $('.message-input').val();
-  date_check = Date.now();
-  var obj = {
+    msg = $('.message-input').val();
+    date_check = Date.now();
+    var obj = {
         type: "message",
         text: msg,
         date: date_check
-        };
-  if ($.trim(msg) == '') {
-    return false;
-  }
-  $('<div class="message message-personal">' + msg + '</div>').appendTo($('.mCSB_container')).addClass('new');
-  webSocket.send(JSON.stringify(obj));
-  setDate();
-  $('.message-input').val(null);
-  updateScrollbar();
-
-  setTimeout(function() {
-    fakeMessage();
-  }, 1000 + (Math.random() * 20) * 100);
+    };
+    if ($.trim(msg) == '') {
+        return false;
+    }
+    $('<div class="message message-personal">' + msg + '</div>').appendTo($('.mCSB_container')).addClass('new');
+    webSocket.send(JSON.stringify(obj));
+    setDate();
+    $('.message-input').val(null);
+    updateScrollbar();
 }
+//   setTimeout(function() {
+//     fakeMessage();
+//   }, 1000 + (Math.random() * 20) * 100);
+// }
 
 $('.message-submit').click(function() {
   insertMessage();

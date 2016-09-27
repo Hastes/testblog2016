@@ -10,7 +10,9 @@ from .forms import CommentGameForm
 def game2048(request):
     comments = CommentGame.objects.all()[:10:]
     recordmans = Score2048.objects.all()[:15:]
-    user = get_object_or_404(User, username = request.user)
+    user = request.user
+    if not user.is_authenticated:
+        return render(request,'2048.html',{'comments':comments,'recordmans':recordmans})
     form = CommentGameForm(request.POST or None)
     if form.is_valid():
         form = form.save(commit=False)

@@ -45,7 +45,7 @@ class UserSettingsForm(forms.ModelForm):
 from django.contrib.auth.forms import UserCreationForm
 
 class UserCreateForm(UserCreationForm):
-    username = forms.RegexField(label="Username", max_length=20,min_length=4,   
+    username = forms.RegexField(label="Username", max_length=20,min_length=4,
         regex=r'^(?i)[\w@]+$',
         help_text = "Обязательное поле. Не более 20 символов. Только буквы, цифры и символы @/_",
         error_messages = {

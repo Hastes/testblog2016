@@ -4,77 +4,34 @@
 {% block content %}
     {% for obj in eng %}
         <div>
-            <a href="" class="spoiler_links"><b>Lesson {{ obj.lesson_number }}</b></a><br>
-            <div class="spoiler_body">
-                    <div>
-            <a id="vocabulary{{ obj.id }}" class="links" onclick="get_data({{ obj.id }},this.id)" >Vocabulary</a><br>
-                <div id="v{{ obj.id }}" class="spoiler_body"></div>
-                    </div>
-                    <div>
-            <a id="story{{ obj.id }}" class="links" class="td" onclick="get_data({{ obj.id }}, this.id)" >Story</a><br>
-                <div id="s{{ obj.id }}" class="spoiler_body"></div>
-                    </div>
-                    <div>
-            <a id="cultural_notes{{ obj.id }}" class="links" onclick="get_data({{ obj.id }},this.id)" >Cultural notes</a><br>
-                <div id="c{{ obj.id }}" class="spoiler_body"></div>
-                    </div>
-                    <div>
-            <a id="action{{ obj.id }}" class="links" onclick="get_data({{ obj.id }},this.id)" >Action</a><br>
-                <div id="a{{ obj.id }}" class="spoiler_body"></div>
-                    </div>
-            </div>
+            <a id="{{ obj.id }}" style="cursor: pointer" onclick="get_data({{ obj.id }})" class="spoiler"><b>Lesson {{ obj.lesson_number }}</b></a><br>
+            <!--gegin--><div id="body{{ obj.id }}" class="spoiler_body"></div><!--gegin-->
+        <!--- enddddddddd   -->
         </div>
     {% endfor %}
 
 
 
 <script type="text/javascript">
-function get_data(lesson_id,td){
-    if (td === "vocabulary"+lesson_id){
-        document.getElementById(td).style = 'color: #2ebaae;';
-    if ($('#vocabulary'+lesson_id).parent().children('div.spoiler_body').html()!== ""){
-        $('#v'+lesson_id).toggle('normal');
-        return false;
-    }}
-    if (td === "story"+lesson_id){
-        document.getElementById(td).style = 'color: #2ebaae;';
-    if(($('#story'+lesson_id).parent().children('div.spoiler_body').html()!== "")){
-        $('#s'+lesson_id).toggle('normal');
-        return false;
-    }}
-    if (td === "cultural_notes"+lesson_id){
-        document.getElementById(td).style = 'color: #2ebaae;';
-    if(($('#cultural_notes'+lesson_id).parent().children('div.spoiler_body').html()!== "")){
-        $('#c'+lesson_id).toggle('normal');
-        return false;
-    }}
-    if (td === "action"+lesson_id){
-        document.getElementById(td).style = 'color: #2ebaae;';
-    if(($('#action'+lesson_id).parent().children('div.spoiler_body').html()!== "")){
-        $('#a'+lesson_id).toggle('normal');
-        return false;
-    }}
+function get_data(lesson_id){
     $.ajax({
         url:'/english_get/'+lesson_id+'/',
-        success: function (eng){
-                if (td === "vocabulary"+lesson_id){
-                    $('#v'+lesson_id).html((eng.eng.vocabulary).replace(/\n/g,"<br>")).toggle('normal');
-                    return false;
-                }
-                if (td === "story"+lesson_id) {
-                    $('#s'+lesson_id).html((eng.eng.story).replace(/\n/g,"<br>")).toggle('normal');
-                     return false;
-                }
-                if (td === "cultural_notes"+lesson_id){
-                    $('#c'+lesson_id).html((eng.eng.cultural_notes).replace(/\n/g,"<br>")).toggle('normal');
-                    return false;
-                }
-                if (td === "action"+lesson_id){
-                    $('#a'+lesson_id).html((eng.eng.action).replace(/\n/g,"<br>")).toggle('normal');
-                    return false;
-                }
+        success: function (data){
+            $("#body"+lesson_id).html('<div><a id="vocabulary" onclick="openlinks(this.id)">Vocabulary</a><br><div id="v" class="spoiler_body">' + data.eng.vocabulary+'</div>' +
+                    '</div>' +
+                    '<div><a id="story" onclick="openlinks(this.id)">Story</a><br><div class="spoiler_body">'+data.eng.story+'</div>' +
+                    '</div>' +
+                    '<div><a id="cultural_notes" onclick="openlinks(this.id)">Cultural notes</a><br><div class="spoiler_body">'+data.eng.cultural_notes+'</div>' +
+                    '</div>' +
+                    '<div></div><a id="action" onclick="openlinks(this.id)">Action</a><br><div class="spoiler_body">'+data.eng.action+'</div>' +
+                    '</div>').toggle('normal');
+            //$('#v'+lesson_id) .html((data.eng.vocabulary).replace(/\n/g,"<br>")).toggle('normal');
         }
     });
+}
+function openlinks(id) {
+    $('#'+id).parent().children('div.spoiler_body').toggle('normal');
+        return false;
 }
 </script>
 {% endblock %}

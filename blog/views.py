@@ -277,7 +277,7 @@ def sendmessageforadmin(request):
     return HttpResponse()
 
 def english_met(request):
-    return render(request,'english.html',{'eng':English.objects.all()})
+    return render(request, 'english.html', {'eng':English.objects.all()})
 def testpage(request):
     return render(request,'index.html',{})
 def testpage2(request):
