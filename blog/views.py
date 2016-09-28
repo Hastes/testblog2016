@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, render_to_response
 from django.http import HttpResponse,HttpResponseRedirect,HttpRequest
 from .models import Post, Comment, Offtop_Comment, Likes, UserProf,English,NewsProfile,ImagePostPicture,MessageForAdmin
 from django.core.paginator import Paginator
@@ -282,4 +282,4 @@ def english_met(request):
 def testpage(request):
     return render(request,'index.html',{})
 def testpage2(request):
-    return render(request,'pusher.html',{})
+    render_to_response('test.html',{})

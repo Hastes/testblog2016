@@ -17,7 +17,7 @@ from django.conf.urls import url,include
 from django.contrib import admin
 from blog import views,pusher
 from chat.views import front_chat
-
+from django.views.generic.base import TemplateView
 
 admin.site.site_header = "2K16 | Как ты сюда попал?"
 
@@ -52,13 +52,13 @@ urlpatterns = [
     url(r'^games/',include("games.urls"),name='games'),
     url(r'^alertpost/$', pusher.message,name="alertpost"),
     url(r'^chats/$',front_chat,name="chat"),
-    url(r'^sendmessageforadmin/$',views.sendmessageforadmin, name='messageforadmin')
+    url(r'^sendmessageforadmin/$',views.sendmessageforadmin, name='messageforadmin'),
+    url(r'^google2cacf60209395090.html/$',TemplateView.as_view(template_name='google2cacf60209395090.html'), name='indexingGoogle')
 ]
-
-
 from . import settings
 import os
 from django.conf.urls.static import static
 if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL,document_root = settings.STATIC_ROOT)
+    urlpatterns += static(settings.MEDIA_URL,document_root = settings.MEDIA_ROOT)
     urlpatterns += static(settings.MEDIA_URL,document_root = settings.MEDIA_ROOT)
