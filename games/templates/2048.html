@@ -1,156 +1,211 @@
 {% extends 'base.html' %}
 {% block content %}
-<head>
-<title>2048</title>
+    <head>
+        <title>2048</title>
 
-  <link href="/static/2048_files/main.css" rel="stylesheet" type="text/css">
-  <link rel="shortcut icon" href="http://gabrielecirulli.github.io/2048/favicon.ico">
-  <link rel="apple-touch-icon" href="http://gabrielecirulli.github.io/2048/meta/apple-touch-icon.png">
-  <link rel="apple-touch-startup-image" href="http://gabrielecirulli.github.io/2048/meta/apple-touch-startup-image-640x1096.png" media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)"> <!-- iPhone 5+ -->
-  <link rel="apple-touch-startup-image" href="http://gabrielecirulli.github.io/2048/meta/apple-touch-startup-image-640x920.png" media="(device-width: 320px) and (device-height: 480px) and (-webkit-device-pixel-ratio: 2)"> <!-- iPhone, retina -->
+        <link href="/static/2048_files/main.css" rel="stylesheet" type="text/css">
+        <link rel="shortcut icon" href="http://gabrielecirulli.github.io/2048/favicon.ico">
+        <link rel="apple-touch-icon" href="http://gabrielecirulli.github.io/2048/meta/apple-touch-icon.png">
+        <link rel="apple-touch-startup-image"
+              href="http://gabrielecirulli.github.io/2048/meta/apple-touch-startup-image-640x1096.png"
+              media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)">
+        <!-- iPhone 5+ -->
+        <link rel="apple-touch-startup-image"
+              href="http://gabrielecirulli.github.io/2048/meta/apple-touch-startup-image-640x920.png"
+              media="(device-width: 320px) and (device-height: 480px) and (-webkit-device-pixel-ratio: 2)">
+        <!-- iPhone, retina -->
 
-<script type="text/javascript" charset="utf-8" async="" src="/static/2048_files/button.e17e434ecfb12438c31724873d54e4cd.js"></script></head>
-<body>
-  <div class="container">
-    <div class="heading">
-      <h1 class="title">2048</h1>
-     <!-- <div class="scores-container">
-        <div class="score-container">116<div class="score-addition">+116</div></div>
-        <div class="best-container">116</div>
-      </div> -->
-    </div>
-
-
-
-  <div class="scores-container">
-        <div class="score-container">116<div class="score-addition">+116</div></div>
-        <div class="best-container">116</div>
-      </div>
-
-  <div class="above-game">
-      <p class="game-intro">Join the numbers and get to the <strong>2048 tile!</strong></p>
-      <a class="restart-button">New Game</a>
-    </div>
-
-
-    <div class="game-container">
-      <div class="game-message">
-        <p></p>
-        <div class="lower">
-	        <a class="keep-playing-button">Keep going</a>
-          <a class="retry-button">Try again</a>
-          <div class="score-sharing"></div>
-          <div class="mailing-list">
-            <!-- MailChimp Signup Form -->
-          </div>
+        <script type="text/javascript" charset="utf-8" async=""
+                src="/static/2048_files/button.e17e434ecfb12438c31724873d54e4cd.js"></script>
+    </head>
+    <body>
+    <div class="container">
+        <div class="heading">
+            <h1 class="title">2048</h1>
+            <!-- <div class="scores-container">
+               <div class="score-container">116<div class="score-addition">+116</div></div>
+               <div class="best-container">116</div>
+             </div> -->
         </div>
-      </div>
-      <div class="grid-container">
-        <div class="grid-row">
-          <div class="grid-cell"></div>
-          <div class="grid-cell"></div>
-          <div class="grid-cell"></div>
-          <div class="grid-cell"></div>
-        </div>
-        <div class="grid-row">
-          <div class="grid-cell"></div>
-          <div class="grid-cell"></div>
-          <div class="grid-cell"></div>
-          <div class="grid-cell"></div>
-        </div>
-        <div class="grid-row">
-          <div class="grid-cell"></div>
-          <div class="grid-cell"></div>
-          <div class="grid-cell"></div>
-          <div class="grid-cell"></div>
-        </div>
-        <div class="grid-row">
-          <div class="grid-cell"></div>
-          <div class="grid-cell"></div>
-          <div class="grid-cell"></div>
-          <div class="grid-cell"></div>
-        </div>
-      </div>
 
-      <div class="tile-container"><div class="tile tile-8 tile-position-2-1 tile-new"><div class="tile-inner">8</div></div><div class="tile tile-2 tile-position-2-4 tile-new"><div class="tile-inner">2</div></div><div class="tile tile-16 tile-position-3-1 tile-new"><div class="tile-inner">16</div></div><div class="tile tile-4 tile-position-3-2 tile-new"><div class="tile-inner">4</div></div><div class="tile tile-4 tile-position-4-1 tile-new"><div class="tile-inner">4</div></div><div class="tile tile-4 tile-position-4-2 tile-new"><div class="tile-inner">4</div></div><div class="tile tile-16 tile-position-4-3 tile-new"><div class="tile-inner">16</div></div><div class="tile tile-2 tile-position-4-4 tile-new"><div class="tile-inner">2</div></div></div>
-    </div>
-  {% if recordmans %}
-    <div class="recordmans">
-     <p>РЕКОРДЫ:</p>
-        <ul>
-        {% for obj in recordmans %}
-            <li><b>{{ forloop.counter }}) <a href="{% url 'userprofile' obj.user %}">{{ obj.user }}</a></b> - {{ obj.score_user }}</li>
-            {% endfor %}
-        </ul>
-    </div>
-    {% endif %}
 
-    <p class="game-explanation">
-      <strong class="important">Как играть:</strong> Используйте <strong>стрелки </strong> чтобы двигать блоки. <strong>R</strong> - РЕСТАРТ.
-    </p><hr>
-      {% if request.user.is_authenticated %}
-      <form method="POST">
-          {% csrf_token %}
-          <form method="POST">
-          <p><textarea cols="40" id="id_comment" maxlength="500" name="comment" rows="10" required=""></textarea></p>
-          <input type="submit" onclick="" value="Отправить">
-      </form>
-      </form>
+        <div class="scores-container">
+            <div class="score-container">116
+                <div class="score-addition">+116</div>
+            </div>
+            <div class="best-container">116</div>
+        </div>
 
-      <hr>{% endif %}
-    <h2>КОММЕНТАРИИ:</h2>
-    {% for obj in comments %}
+        <div class="above-game">
+            <p class="game-intro">Join the numbers and get to the <strong>2048 tile!</strong></p>
+            <a class="restart-button">New Game</a>
+        </div>
+
+
+        <div class="game-container">
+            <div class="game-message">
+                <p></p>
+                <div class="lower">
+                    <a class="keep-playing-button">Keep going</a>
+                    <a class="retry-button">Try again</a>
+                    <div class="score-sharing"></div>
+                    <div class="mailing-list">
+                        <!-- MailChimp Signup Form -->
+                    </div>
+                </div>
+            </div>
+            <div class="grid-container">
+                <div class="grid-row">
+                    <div class="grid-cell"></div>
+                    <div class="grid-cell"></div>
+                    <div class="grid-cell"></div>
+                    <div class="grid-cell"></div>
+                </div>
+                <div class="grid-row">
+                    <div class="grid-cell"></div>
+                    <div class="grid-cell"></div>
+                    <div class="grid-cell"></div>
+                    <div class="grid-cell"></div>
+                </div>
+                <div class="grid-row">
+                    <div class="grid-cell"></div>
+                    <div class="grid-cell"></div>
+                    <div class="grid-cell"></div>
+                    <div class="grid-cell"></div>
+                </div>
+                <div class="grid-row">
+                    <div class="grid-cell"></div>
+                    <div class="grid-cell"></div>
+                    <div class="grid-cell"></div>
+                    <div class="grid-cell"></div>
+                </div>
+            </div>
+
+            <div class="tile-container">
+                <div class="tile tile-8 tile-position-2-1 tile-new">
+                    <div class="tile-inner">8</div>
+                </div>
+                <div class="tile tile-2 tile-position-2-4 tile-new">
+                    <div class="tile-inner">2</div>
+                </div>
+                <div class="tile tile-16 tile-position-3-1 tile-new">
+                    <div class="tile-inner">16</div>
+                </div>
+                <div class="tile tile-4 tile-position-3-2 tile-new">
+                    <div class="tile-inner">4</div>
+                </div>
+                <div class="tile tile-4 tile-position-4-1 tile-new">
+                    <div class="tile-inner">4</div>
+                </div>
+                <div class="tile tile-4 tile-position-4-2 tile-new">
+                    <div class="tile-inner">4</div>
+                </div>
+                <div class="tile tile-16 tile-position-4-3 tile-new">
+                    <div class="tile-inner">16</div>
+                </div>
+                <div class="tile tile-2 tile-position-4-4 tile-new">
+                    <div class="tile-inner">2</div>
+                </div>
+            </div>
+        </div>
+        {% if recordmans %}
+            <div class="recordmans">
+                <p>РЕКОРДЫ:</p>
+                <ul>
+                    {% for obj in recordmans %}
+                        <li><b>{{ forloop.counter }}) <a href="{% url 'userprofile' obj.user %}">{{ obj.user }}</a></b>
+                            - {{ obj.score_user }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+
+        <p class="game-explanation">
+            <strong class="important">Как играть:</strong> Используйте <strong>стрелки </strong> чтобы двигать блоки.
+            <strong>R</strong> - РЕСТАРТ.
+        </p>
         <hr>
-        <p><h3><b style="float:left; margin-right: 20px; ">{{ obj.user }}</b></h3></p>
-        <p>{{ obj.date|timesince }} назад</p><br>
-        <i>Сообщение:</i> <br>
-        <p >{{ obj.comment }}</p><br>
+        {% if request.user.is_authenticated %}
+            <form method="POST">
+                {% csrf_token %}
+                <form method="POST">
+                    <p><textarea cols="40" id="id_comment" maxlength="500" name="comment" rows="10"
+                                 required=""></textarea></p>
+                    <input type="submit" onclick="" value="Отправить">
+                </form>
+            </form>
+
+            <hr>{% endif %}
+        <h2>КОММЕНТАРИИ:</h2>
+        {% for obj in comments %}
+            <hr>
+            <p><h3><b style="float:left; margin-right: 20px; ">{{ obj.user }}</b></h3></p>
+            <p>{{ obj.date|timesince }} назад</p><br>
+            <i>Сообщение:</i> <br>
+            <p>{{ obj.comment }}</p><br>
+            <hr>
+        {% endfor %}
         <hr>
-    {% endfor %}
-      <hr>
-    <p>
-    <strong class="important">Note:</strong> The game on <a href="http://git.io/2048">this site</a> is the original version of 2048. Apps for <a href="https://itunes.apple.com/us/app/2048-by-gabriele-cirulli/id868076805" target="_blank">iOS</a> and <a href="https://play.google.com/store/apps/details?id=com.gabrielecirulli.app2048" target="_blank">Android</a> are also available. Other versions are derivatives or fakes, and should be used with caution.
-    </p>
-    <hr>
-    <p>
-    Created by <a href="http://gabrielecirulli.com/" target="_blank">Gabriele Cirulli.</a> Based on <a href="https://itunes.apple.com/us/app/1024!/id823499224" target="_blank">1024 by Veewo Studio</a> and conceptually similar to <a href="http://asherv.com/threes/" target="_blank">Threes by Asher Vollmer.</a>
-    </p>
-  </div>
+        <p>
+            <strong class="important">Note:</strong> The game on <a href="http://git.io/2048">this site</a> is the
+            original version of 2048. Apps for <a
+                href="https://itunes.apple.com/us/app/2048-by-gabriele-cirulli/id868076805" target="_blank">iOS</a> and
+            <a href="https://play.google.com/store/apps/details?id=com.gabrielecirulli.app2048"
+               target="_blank">Android</a> are also available. Other versions are derivatives or fakes, and should be
+            used with caution.
+        </p>
+        <hr>
+        <p>
+            Created by <a href="http://gabrielecirulli.com/" target="_blank">Gabriele Cirulli.</a> Based on <a
+                href="https://itunes.apple.com/us/app/1024!/id823499224" target="_blank">1024 by Veewo Studio</a> and
+            conceptually similar to <a href="http://asherv.com/threes/" target="_blank">Threes by Asher Vollmer.</a>
+        </p>
+    </div>
 
-  <script src="/static/2048_files/bind_polyfill.js"></script>
-  <script src="/static/2048_files/classlist_polyfill.js"></script>
-  <script src="/static/2048_files/animframe_polyfill.js"></script>
-  <script src="/static/2048_files/keyboard_input_manager.js"></script>
-  <script src="/static/2048_files/html_actuator.js"></script>
-  <script src="/static/2048_files/grid.js"></script>
-  <script src="/static/2048_files/tile.js"></script>
-  <script src="/static/2048_files/local_storage_manager.js"></script>
-  <script src="/static/2048_files/game_manager.js"></script>
-  <script src="/static/2048_files/application.js"></script>
+    <script src="/static/2048_files/bind_polyfill.js"></script>
+    <script src="/static/2048_files/classlist_polyfill.js"></script>
+    <script src="/static/2048_files/animframe_polyfill.js"></script>
+    <script src="/static/2048_files/keyboard_input_manager.js"></script>
+    <script src="/static/2048_files/html_actuator.js"></script>
+    <script src="/static/2048_files/grid.js"></script>
+    <script src="/static/2048_files/tile.js"></script>
+    <script src="/static/2048_files/local_storage_manager.js"></script>
+    <script src="/static/2048_files/game_manager.js"></script>
+    <script src="/static/2048_files/application.js"></script>
 
-  <script>
-    (function(i,s,o,g,r,a,m){i["GoogleAnalyticsObject"]=r;i[r]=i[r]||function(){
-    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-    })(window,document,"script","//www.google-analytics.com/analytics.js","ga");
-    console.log(ga.q);
-    ga("create", "UA-42620757-2", "gabrielecirulli.github.io");
-    ga("send", "pageview");
-      function CheckMs(datatest) {
-    $.ajax({
-    type:'POST',
-              url:'/games/2048/score/',
-              data:{
+    <script>
+        (function (i, s, o, g, r, a, m) {
+            i["GoogleAnalyticsObject"] = r;
+            i[r] = i[r] || function () {
+                        (i[r].q = i[r].q || []).push(arguments)
+                    }, i[r].l = 1 * new Date();
+            a = s.createElement(o),
+                    m = s.getElementsByTagName(o)[0];
+            a.async = 1;
+            a.src = g;
+            m.parentNode.insertBefore(a, m)
+        })(window, document, "script", "//www.google-analytics.com/analytics.js", "ga");
+        console.log(ga.q);
+        ga("create", "UA-42620757-2", "gabrielecirulli.github.io");
+        ga("send", "pageview");
+        function CheckMs(datatest) {
+            $.ajax({
+                type: 'POST',
+                url: '/games/2048/score/',
+                data: {
                     score: datatest,
                     csrfmiddlewaretoken: '{{ csrf_token }}'
-              },
-              success: function (data) {
-                  if (data) alert(data);
-              }
-        })
-}
+                },
+                success: function (data) {
+                    if (data) alert(data);
+                }
+            })
+        }
 
-  </script>
+    </script>
 
-<iframe id="rufous-sandbox" scrolling="no" frameborder="0" allowtransparency="true" allowfullscreen="true" style="position: absolute; visibility: hidden; display: none; width: 0px; height: 0px; padding: 0px; border: none;" src="/static/2048_files/saved_resource.html"></iframe></body>
+    <iframe id="rufous-sandbox" scrolling="no" frameborder="0" allowtransparency="true" allowfullscreen="true"
+            style="position: absolute; visibility: hidden; display: none; width: 0px; height: 0px; padding: 0px; border: none;"
+            src="/static/2048_files/saved_resource.html"></iframe>
+    </body>
 {% endblock content %}

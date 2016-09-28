@@ -1,117 +1,116 @@
 <!DOCTYPE html>
 <html>
-  <head>
+<head>
     <title>HTML5 Create HTML5 Canvas JavaScript Drawing App Example</title>
     <script type="text/javascript" src="/static/assets/js/jquery.min.js"></script>
-  </head>
-  <body>
-    <p class="demoToolList">Clear the canvas: <button id="clearCanvasSimple" type="button">Clear</button></p>
-    <div id="canvasDiv"></div>
-    <style> #canvasDiv {
-            cursor: pointer;
-    }</style>
+</head>
+<body>
+<p class="demoToolList">Clear the canvas:
+    <button id="clearCanvasSimple" type="button">Clear</button>
+</p>
+<div id="canvasDiv"></div>
+<style> #canvasDiv {
+    cursor: pointer;
+}</style>
 
 
-  <script type="application/javascript">
-var webSocket = new WebSocket('ws://' + window.location.host + '/painters/index');
-console.log("Connecting to " + 'ws://' + window.location.host + '/painters/index');
-var clickX = new Array();
-var clickY= new Array();
-var clickDrag = new Array();
-var paint;
-var canvas;
-var context;
-var canvasWidth = 2000; 
-var canvasHeight = 2000;
-var canvasDiv = document.getElementById('canvasDiv');
-canvas = document.createElement('canvas');
-canvas.setAttribute('width', canvasWidth);
-canvas.setAttribute('height', canvasHeight);
-canvas.setAttribute('id', 'canvas');
-canvasDiv.appendChild(canvas);
-if(typeof G_vmlCanvasManager != 'undefined') {
-	canvas = G_vmlCanvasManager.initElement(canvas);
-}
-context = canvas.getContext("2d");
-	$('#clearCanvasSimple').click(function(e)
-	{
-		clickX = new Array();
-		clickY = new Array();
-		clickDrag = new Array();
-		clearCanvas();
-	});
-function clearCanvas()
-{
-	context.clearRect(0, 0, canvasWidth, canvasHeight);
-}
+<script type="application/javascript">
+    var webSocket = new WebSocket('ws://' + window.location.host + '/painters/index');
+    console.log("Connecting to " + 'ws://' + window.location.host + '/painters/index');
+    var clickX = new Array();
+    var clickY = new Array();
+    var clickDrag = new Array();
+    var paint;
+    var canvas;
+    var context;
+    var canvasWidth = 2000;
+    var canvasHeight = 2000;
+    var canvasDiv = document.getElementById('canvasDiv');
+    canvas = document.createElement('canvas');
+    canvas.setAttribute('width', canvasWidth);
+    canvas.setAttribute('height', canvasHeight);
+    canvas.setAttribute('id', 'canvas');
+    canvasDiv.appendChild(canvas);
+    if (typeof G_vmlCanvasManager != 'undefined') {
+        canvas = G_vmlCanvasManager.initElement(canvas);
+    }
+    context = canvas.getContext("2d");
+    $('#clearCanvasSimple').click(function (e) {
+        clickX = new Array();
+        clickY = new Array();
+        clickDrag = new Array();
+        clearCanvas();
+    });
+    function clearCanvas() {
+        context.clearRect(0, 0, canvasWidth, canvasHeight);
+    }
 
-    $('#canvas').mousedown(function(e){
-  var mouseX = e.pageX - this.offsetLeft;
-  var mouseY = e.pageY - this.offsetTop;
-  paint = true;
-  addClick(mouseX, mouseY);
-  redraw();
-});
-	$('#canvas').mousemove(function(e) {
-        if(paint){
+    $('#canvas').mousedown(function (e) {
+        var mouseX = e.pageX - this.offsetLeft;
+        var mouseY = e.pageY - this.offsetTop;
+        paint = true;
+        addClick(mouseX, mouseY);
+        redraw();
+    });
+    $('#canvas').mousemove(function (e) {
+        if (paint) {
             addClick(e.pageX - this.offsetLeft, e.pageY - this.offsetTop, true);
             redraw();
         }
-});
-      $('#canvas').mouseup(function(e){
+    });
+    $('#canvas').mouseup(function (e) {
         paint = false;
-      });
-      $('#canvas').mouseleave(function(e){
-  paint = false;
-});
+    });
+    $('#canvas').mouseleave(function (e) {
+        paint = false;
+    });
 
-function addClick(x, y, dragging)
-{
+    function addClick(x, y, dragging) {
 
-  clickX.push(x);
-  clickY.push(y);
-  clickDrag.push(dragging);
+        clickX.push(x);
+        clickY.push(y);
+        clickDrag.push(dragging);
 
-  var msg = {
-      clickX: x,
-      clickY: y,
-      clickDrag: dragging
-  };
+        var msg = {
+            clickX: x,
+            clickY: y,
+            clickDrag: dragging
+        };
 
-  webSocket.send(JSON.stringify(msg));
-}
-function redraw(){
-  context.clearRect(0, 0, context.canvas.width, context.canvas.height); // Clears the canvas
+        webSocket.send(JSON.stringify(msg));
+    }
+    function redraw() {
+        context.clearRect(0, 0, context.canvas.width, context.canvas.height); // Clears the canvas
 
-  context.strokeStyle = "#000";
-  context.lineJoin = "round";
-  context.lineWidth = 4;
+        context.strokeStyle = "#000";
+        context.lineJoin = "round";
+        context.lineWidth = 4;
 
-  for(var i=0; i < clickX.length; i++) {
-    context.beginPath();
-    if(clickDrag[i] && i){
-      context.moveTo(clickX[i-1], clickY[i-1]);
-     }else{
-      context.moveTo(clickX[i]-1, clickY[i]);
-     }
-     context.lineTo(clickX[i], clickY[i]);
-     context.closePath();
-     context.stroke();
-  }
-}
+        for (var i = 0; i < clickX.length; i++) {
+            context.beginPath();
+            if (clickDrag[i] && i) {
+                context.moveTo(clickX[i - 1], clickY[i - 1]);
+            } else {
+                context.moveTo(clickX[i] - 1, clickY[i]);
+            }
+            context.lineTo(clickX[i], clickY[i]);
+            context.closePath();
+            context.stroke();
+        }
+    }
 
-webSocket.onmessage = function(message) {
-    var data = JSON.parse(message.data);
-    clickX.push(data.message.clickX);
-    clickY.push(data.message.clickY);
-    clickDrag.push(data.message.clickDrag);
-    redraw()
-}
-  </script>
-    <script type="application/javascript">
-        $(document).ready(function () {
-            redraw();
-        })
-     </script>
-  </body>
+    webSocket.onmessage = function (message) {
+        var data = JSON.parse(message.data);
+        clickX.push(data.message.clickX);
+        clickY.push(data.message.clickY);
+        clickDrag.push(data.message.clickDrag);
+        redraw()
+    }
+</script>
+<script type="application/javascript">
+    $(document).ready(function () {
+        redraw();
+    })
+</script>
+</body>
 </html>

@@ -1,48 +1,56 @@
 {% extends "base.html" %}
 {% block myprof %}
-<section id="intro">
-    <a href="" class="logo"><img onclick="return popup_avatar()" id="avatar" src="/static/images/av_undef.png" alt="" /></a>
-    <header>
-        <h2 data-title="{{ user.username }}">{{ user.username }}</h2>
-        <p>Звание - <a href="" style="color:#080808">{{ user_inf.rank_name }}</a></p>
-        <p>Репутация - <a href="" style="color:#080808" id="rep_user">{{ user_inf.reputation }}</a></p>
-        {% if visible %}
-        <p><button id="btn_rep" onclick="add_rep_user({{ user.id }})" class="button fit">Топ узер ин зе ворлд</button></p>
-            {% if request.user.username == user.username %}
-                <div>
-                    <div class="spoiler_links"><i><p>Настройки</p></i></div>
-                    <div class="spoiler_body">
-                        <form method="POST" action="{% url 'usersettings' user.username %}">{% csrf_token %}
-                        {{ formimg.media }}
-                        {{ formimg.as_p }}
-                        <p><button id="btn_rep" type="submit" >Изменить аватар</button></p>
-                        </form>
+    <section id="intro">
+        <a href="" class="logo"><img onclick="return popup_avatar()" id="avatar" src="/static/images/av_undef.png"
+                                     alt=""/></a>
+        <header>
+            <h2 data-title="{{ user.username }}">{{ user.username }}</h2>
+            <p>Звание - <a href="" style="color:#080808">{{ user_inf.rank_name }}</a></p>
+            <p>Репутация - <a href="" style="color:#080808" id="rep_user">{{ user_inf.reputation }}</a></p>
+            {% if visible %}
+                <p>
+                    <button id="btn_rep" onclick="add_rep_user({{ user.id }})" class="button fit">Топ узер ин зе ворлд
+                    </button>
+                </p>
+                {% if request.user.username == user.username %}
+                    <div>
+                        <div class="spoiler_links"><i><p>Настройки</p></i></div>
+                        <div class="spoiler_body">
+                            <form method="POST" action="{% url 'usersettings' user.username %}">{% csrf_token %}
+                                {{ formimg.media }}
+                                {{ formimg.as_p }}
+                                <p>
+                                    <button id="btn_rep" type="submit">Изменить аватар</button>
+                                </p>
+                            </form>
+                        </div>
                     </div>
-                </div>
                 {% endif %}
-        {% endif %}
-    </header>
-</section>
+            {% endif %}
+        </header>
+    </section>
 
 {% endblock %}
 
 {% block content %}
-     {% if request.user.username == user.username %}
+    {% if request.user.username == user.username %}
         <form method="POST">
-        {% csrf_token %}
-        {{ form_news.as_p }}
-        <input type="submit">
-         </form>
+            {% csrf_token %}
+            {{ form_news.as_p }}
+            <input type="submit">
+        </form>
     {% else %}
-         <center><h2>НОВОСТИ ПОЛЬЗОВАТЕЛЯ: </h2><br></center>
-    {% if get_news.count == 0 %}
+        <center><h2>НОВОСТИ ПОЛЬЗОВАТЕЛЯ: </h2><br></center>
+        {% if get_news.count == 0 %}
             <center><p>К сожалению у этого человека нет никаких новостей((</p></center>
         {% endif %}
     {% endif %}
     {% for obj in get_news %}
         <article class="post">
-            <h3 style="float: left">{{ user.username }}</h3> <p style="float: right">{{ obj.date }}</p><br><hr>
+            <h3 style="float: left">{{ user.username }}</h3>
+            <p style="float: right">{{ obj.date }}</p><br>
+            <hr>
             <p>{{ obj.news }}</p><br>
-            </article>
+        </article>
     {% endfor %}
 {% endblock content %}

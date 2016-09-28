@@ -1,11 +1,12 @@
 from django.shortcuts import render, get_object_or_404, render_to_response
-from django.http import HttpResponse,HttpResponseRedirect,HttpRequest
-from .models import Post, Comment, Offtop_Comment, Likes, UserProf,English,NewsProfile,ImagePostPicture,MessageForAdmin
+from django.http import HttpResponse, HttpResponseRedirect, HttpRequest
+from .models import Post, Comment, Offtop_Comment, Likes, UserProf, English, NewsProfile, ImagePostPicture, \
+    MessageForAdmin
 from django.core.paginator import Paginator
 from ipware.ip import get_ip
-from  django.contrib.auth.forms import UserCreationForm,AuthenticationForm
+from  django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import authenticate, login, logout
-from django.contrib import auth,messages
+from django.contrib import auth, messages
 from django.contrib.auth.middleware import get_user
 from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
@@ -15,15 +16,19 @@ from django.contrib import sessions
 from django.http import Http404
 from django.db import IntegrityError
 from django.utils.text import slugify
-from blog.API.serializers import Offtop_CommentSerializer, UserProfSerializer,EngilshSerializer
+from blog.API.serializers import Offtop_CommentSerializer, UserProfSerializer, EngilshSerializer
 import json
-from blog.forms import CreatePostForm,AddCommentForPost,AddNewsProfile,ImagePostPictureForm,UserSettingsForm,UserCreateForm
+from blog.forms import CreatePostForm, AddCommentForPost, AddNewsProfile, ImagePostPictureForm, UserSettingsForm, \
+    UserCreateForm
 from django.http import JsonResponse
+
 # Create your views here.
-count_page=2
+COUNT_PAGE = 3
+
 
 def get_ip_user(request):
-    return HttpResponse(json.dumps({'get_ip':get_ip(request)}), content_type="application/json")
+    return HttpResponse(json.dumps({'get_ip': get_ip(request)}), content_type="application/json")
+
 
 def article(request, article_id=None):
     objects = get_object_or_404(Post, id=article_id)
@@ -34,7 +39,9 @@ def article(request, article_id=None):
         instance.comment_post = objects
         instance.save()
         return HttpResponseRedirect(objects.get_absolute_url())
-    return render(request,'single.html',{'objects':objects,'comments':Comment.objects.filter(comment_post=article_id),'form':form})
+    return render(request, 'single.html',
+                  {'objects': objects, 'comments': Comment.objects.filter(comment_post=article_id), 'form': form})
+
 
 def created_post(request):
     if request.user.is_staff or request.user.is_superuser:
@@ -51,15 +58,16 @@ def created_post(request):
             return HttpResponseRedirect('/')
     else:
         raise Http404
-    return render(request,'created.html',{'form':form,'formimg':formimg})
+    return render(request, 'created.html', {'form': form, 'formimg': formimg})
+
 
 def update_article(request, article_id=None):
     if not (request.user.is_staff or request.user.is_superuser):
         raise Http404
-    instance = get_object_or_404(Post,id=article_id)
-    instance_img = ImagePostPicture.objects.get(key = instance)
-    form = CreatePostForm(request.POST or None,request.FILES or None,instance=instance)
-    formimg = ImagePostPictureForm(request.POST or None,instance= instance_img )
+    instance = get_object_or_404(Post, id=article_id)
+    instance_img = ImagePostPicture.objects.get(key=instance)
+    form = CreatePostForm(request.POST or None, request.FILES or None, instance=instance)
+    formimg = ImagePostPictureForm(request.POST or None, instance=instance_img)
     if form.is_valid() & formimg.is_valid():
         instance = form.save(commit=False)
         instance.author = request.user
@@ -69,11 +77,10 @@ def update_article(request, article_id=None):
         instance_img.save()
         return HttpResponseRedirect('/')
     args = {
-        'form':form,
-        'formimg':formimg,
+        'form': form,
+        'formimg': formimg,
     }
-    return render(request,'created.html',args)
-
+    return render(request, 'created.html', args)
 
 
 def delete_article(request, article_id=None):
@@ -83,39 +90,42 @@ def delete_article(request, article_id=None):
         Comment.objects.filter(comment_post=article_id).delete()
     return HttpResponseRedirect('/')
 
-def front(request,page_number=1):
+
+def front(request, page_number=1):
     objects = Post.objects.all()
     search = request.GET.get('q')
     if search:
         objects = Post.objects.filter(title__icontains=search)
-    current_page = Paginator(objects,count_page)
-    return render(request,'posts.html',{'objects':current_page.page(page_number)})
+    current_page = Paginator(objects, COUNT_PAGE)
+    return render(request, 'posts.html', {'objects': current_page.page(page_number)})
+
 
 def usersettings(request, username):
     user = get_object_or_404(User, username=username)
     formimg = UserSettingsForm(request.POST)
     if formimg.is_valid():
-            formimg = formimg.save(commit=False)
-            formimg.user_key = user
-            formimg.save()
-    return HttpResponseRedirect('/user_profile/'+username)
+        formimg = formimg.save(commit=False)
+        formimg.user_key = user
+        formimg.save()
+    return HttpResponseRedirect('/user_profile/' + username)
 
-def userprofile(request,username):
-    user = get_object_or_404(User,username=username)
-    get_news = NewsProfile.objects.filter(key = user.id)[:15:]
+
+def userprofile(request, username):
+    user = get_object_or_404(User, username=username)
+    get_news = NewsProfile.objects.filter(key=user.id)[:15:]
     content_type = ContentType.objects.get_for_model(UserProf)
     try:
         UserProf.objects.get(user_key=user)
     except ObjectDoesNotExist:
         UserProf.objects.update_or_create(user_key=user)
     user_inf = UserProf.objects.get(user_key=user)
-    rank = Likes.objects.filter(content_type=content_type,object_id=user_inf.user_key_id).count()
+    rank = Likes.objects.filter(content_type=content_type, object_id=user_inf.user_key_id).count()
     user_inf.rank = rank
     user_inf.save()
     form_news = None
     if user.username == request.user.username:
         form_news = AddNewsProfile(request.POST or None)
-        formimg = UserSettingsForm(request.POST or None,instance=user_inf)
+        formimg = UserSettingsForm(request.POST or None, instance=user_inf)
         if form_news.is_valid():
             form = form_news.save(commit=False)
             form.key = user_inf
@@ -125,17 +135,19 @@ def userprofile(request,username):
         form_news = None
         formimg = None
     if not request.user.is_authenticated:
-        return render(request,'userprofile.html',{'user':user,'user_inf':user_inf,'get_news':get_news})
+        return render(request, 'userprofile.html', {'user': user, 'user_inf': user_inf, 'get_news': get_news})
     try:
-        Likes.objects.get(content_type=content_type,user_id=request.user.id,object_id=user_inf.user_key_id)
+        Likes.objects.get(content_type=content_type, user_id=request.user.id, object_id=user_inf.user_key_id)
         visible_btn = False
         print(visible_btn)
     except ObjectDoesNotExist:
         visible_btn = True
-    return render(request,'userprofile.html',{'user':user,'user_inf':user_inf,'visible':visible_btn,'news':NewsProfile.objects.all(),
-                                              'formimg':formimg,'form_news':form_news,'get_news':get_news})
+    return render(request, 'userprofile.html',
+                  {'user': user, 'user_inf': user_inf, 'visible': visible_btn, 'news': NewsProfile.objects.all(),
+                   'formimg': formimg, 'form_news': form_news, 'get_news': get_news})
 
-def add_rep_user(request,id_user):
+
+def add_rep_user(request, id_user):
     if not request.user.is_authenticated:
         return HttpResponse('')
     if id_user == str(request.user.id):
@@ -143,8 +155,9 @@ def add_rep_user(request,id_user):
     instance = UserProf.objects.get(user_key=id_user)
     content_type = ContentType.objects.get_for_model(UserProf)
     try:
-        like_generic = Likes.objects.get(content_type=content_type,user_id=auth.get_user(request).id,object_id=id_user)
-        instance.reputation -=1
+        like_generic = Likes.objects.get(content_type=content_type, user_id=auth.get_user(request).id,
+                                         object_id=id_user)
+        instance.reputation -= 1
         like_generic.delete()
     except ObjectDoesNotExist:
         like_generic = Likes.objects.create(content_type=content_type,
@@ -152,9 +165,10 @@ def add_rep_user(request,id_user):
                                             object_id=id_user,
                                             like=True
                                             )
-        instance.reputation +=1
+        instance.reputation += 1
     instance.save()
     return HttpResponse(instance.reputation)
+
 
 # def likepost(request, article_id):
 #     if not request.session.get('has_liked'+article_id, False):
@@ -174,7 +188,7 @@ def likepost(request, article_id):
         return HttpResponse('')
     content_type = ContentType.objects.get_for_model(Post)
     try:
-        like_generic = Likes.objects.get(content_type=content_type,user_id=request.user.id,object_id=article_id)
+        like_generic = Likes.objects.get(content_type=content_type, user_id=request.user.id, object_id=article_id)
         like_generic.delete()
     except ObjectDoesNotExist:
         print('is None')
@@ -183,13 +197,15 @@ def likepost(request, article_id):
                                             object_id=article_id,
                                             like=True
                                             )
-    return HttpResponse(Likes.objects.filter(content_type=content_type,object_id=article_id).count())
+    return HttpResponse(Likes.objects.filter(content_type=content_type, object_id=article_id).count())
+
 
 def message_like(request, message_id):
     like = Offtop_Comment.objects.get(id=message_id)
-    like.likes+=1
+    like.likes += 1
     like.save()
     return HttpResponse()
+
 
 def register_user(request):
     args = {}
@@ -199,49 +215,56 @@ def register_user(request):
         if user_form.is_valid():
             try:
                 user_form.save()
-                login(request, authenticate(username=request.POST['username'].lower(), password=request.POST['password1']))
+                login(request,
+                      authenticate(username=request.POST['username'].lower(), password=request.POST['password1']))
                 return HttpResponseRedirect('/')
             except IntegrityError:
-                messages.add_message(request,messages.ERROR, "Пользователь с таким именем уже существует")
+                messages.add_message(request, messages.ERROR, "Пользователь с таким именем уже существует")
         else:
-            args['form']= user_form
-    return render(request,'register.html',args)
+            args['form'] = user_form
+    return render(request, 'register.html', args)
+
 
 def login_user(request):
     args = {}
-    args['form']= AuthenticationForm()
+    args['form'] = AuthenticationForm()
     if request.POST:
         username = request.POST['username'].lower()
         password = request.POST['password']
-        user = authenticate(username=username,password=password)
+        user = authenticate(username=username, password=password)
         if user is not None:
             login(request, user)
             return HttpResponseRedirect('/')
         else:
             err = "User not found 404 or incorrect password"
-            return render(request,'login.html',{'errorlog':err,'form':args['form']})
-    return render(request,'login.html',args)
+            return render(request, 'login.html', {'errorlog': err, 'form': args['form']})
+    return render(request, 'login.html', args)
+
 
 def logout_user(request):
     logout(request)
     return HttpResponseRedirect('/')
 
+
 def offtop(request):
     # objects= Offtop_Comment.objects.all()
-    return render(request,'offtop.html',{})
+    return render(request, 'offtop.html', {})
+
 
 def offtopjs(request):
     if request.method == 'POST':
         message = request.POST["messs"]
-        if message!= "":
-            Offtop_Comment.objects.create(author=request.user,message=message)
+        if message != "":
+            Offtop_Comment.objects.create(author=request.user, message=message)
     return HttpResponse()
+
 
 def offtop_reload(request):
     args = {}
-    obj  = Offtop_Comment.objects.all()
-    args['objects']= Offtop_CommentSerializer(obj,many=True).data
+    obj = Offtop_Comment.objects.all()
+    args['objects'] = Offtop_CommentSerializer(obj, many=True).data
     return HttpResponse(json.dumps(args), content_type="application/json")
+
 
 def delete_message(request):
     user = get_user(request)
@@ -251,35 +274,42 @@ def delete_message(request):
         raise Http404
     return HttpResponse()
 
+
 def users_section(request):
     args = {}
     userprof = UserProf.objects.all()[:5:]
     try:
         UserProf.objects.get(user_key=request.user)
         req_user = UserProf.objects.filter(user_key=request.user)
-        args['request_user'] = UserProfSerializer(req_user,many=True).data
+        args['request_user'] = UserProfSerializer(req_user, many=True).data
     except:
         pass
-    args['user_section'] = UserProfSerializer(userprof,many=True).data
+    args['user_section'] = UserProfSerializer(userprof, many=True).data
     return HttpResponse(json.dumps(args), content_type="application/json")
 
-def english_get(request,pk):
+
+def english_get(request, pk):
     obj = English.objects.get(id=pk)
     args = {}
-    args['eng']= EngilshSerializer(obj).data
-    return HttpResponse(json.dumps(args),content_type="application/json")
+    args['eng'] = EngilshSerializer(obj).data
+    return HttpResponse(json.dumps(args), content_type="application/json")
 
 
 def sendmessageforadmin(request):
-    message = request.POST.get('messageforadmin',False)
+    message = request.POST.get('messageforadmin', False)
     if (message != False) & (request.session.get('already', False) == False):
-        MessageForAdmin.objects.create(message_admin = message)
+        MessageForAdmin.objects.create(message_admin=message)
         request.session['already'] = True
     return HttpResponse()
 
+
 def english_met(request):
-    return render(request, 'english.html', {'eng':English.objects.all()})
+    return render(request, 'english.html', {'eng': English.objects.all()})
+
+
 def testpage(request):
-    return render(request,'index.html',{})
+    return render(request, 'index.html', {})
+
+
 def testpage2(request):
-    render_to_response('test.html',{})
+    render_to_response('test.html', {})
