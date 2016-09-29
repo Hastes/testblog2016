@@ -66,11 +66,7 @@
     });
 
     function addClick(x, y, dragging) {
-
-        clickX.push(x);
-        clickY.push(y);
-        clickDrag.push(dragging);
-
+        
         var msg = {
             clickX: x,
             clickY: y,
@@ -101,6 +97,7 @@
 
     webSocket.onmessage = function (message) {
         var data = JSON.parse(message.data);
+        console.log(message);
         clickX.push(data.message.clickX);
         clickY.push(data.message.clickY);
         clickDrag.push(data.message.clickDrag);

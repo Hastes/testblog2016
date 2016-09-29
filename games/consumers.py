@@ -14,11 +14,7 @@ def ws_connect(message):
     #     "type": INIT
     # }))
     Group('painters').add(message.reply_channel)
-    Group('painters').send({
-        'text':json.dumps({
-            'id': message.reply_channel,
-        })
-    })
+
 
 
 def ws_message(message):
@@ -31,7 +27,7 @@ def ws_message(message):
         'text': json.dumps({
             'message': data,
             'sender': message.reply_channel.name,
-            "type": UPDATE
+
     })}),
 
 
