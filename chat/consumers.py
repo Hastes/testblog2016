@@ -15,7 +15,6 @@ def ws_message(message):
        return
     Group('chat').send({'text': json.dumps({'message': data,
                                             'sender': message.reply_channel.name})}),
-    print(message.reply_channel.name)
 
 def ws_disconnect(message):
     Group('chat').discard(message.reply_channel)
