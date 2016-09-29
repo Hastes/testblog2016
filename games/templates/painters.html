@@ -100,7 +100,6 @@
 
     webSocket.onmessage = function (message) {
         var data = JSON.parse(message.data);
-        console.log(message);
         clickX.push(data.message.clickX);
         clickY.push(data.message.clickY);
         clickDrag.push(data.message.clickDrag);
