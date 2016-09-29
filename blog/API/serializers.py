@@ -4,11 +4,13 @@ from rest_framework.serializers import (
     ModelField,
     HyperlinkedIdentityField)
 
-from blog.models import Offtop_Comment,UserProf,English
+from blog.models import Offtop_Comment, UserProf, English
 from django.contrib.auth.models import User
+
 
 class Offtop_CommentSerializer(ModelSerializer):
     author = SerializerMethodField()
+
     class Meta:
         model = Offtop_Comment
         fields = [
@@ -18,11 +20,14 @@ class Offtop_CommentSerializer(ModelSerializer):
             'likes',
             'created_date',
         ]
-    def get_author(self,obj):
+
+    def get_author(self, obj):
         return str(obj.author.username)
+
 
 class UserProfSerializer(ModelSerializer):
     user_key = SerializerMethodField()
+
     class Meta:
         model = UserProf
         fields = [
@@ -33,8 +38,10 @@ class UserProfSerializer(ModelSerializer):
             'reputation',
             'avatar',
         ]
-    def get_user_key(self,obj):
+
+    def get_user_key(self, obj):
         return str(obj.user_key.username)
+
 
 class EngilshSerializer(ModelSerializer):
     class Meta:
