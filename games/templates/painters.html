@@ -66,7 +66,7 @@
     });
 
     function addClick(x, y, dragging) {
-        
+
         var msg = {
             clickX: x,
             clickY: y,
@@ -74,6 +74,9 @@
         };
 
         webSocket.send(JSON.stringify(msg));
+    }
+    webSocket.onclose = function () {
+            webSocket = new WebSocket('ws://' + window.location.host + '/painters/index');
     }
     function redraw() {
         context.clearRect(0, 0, context.canvas.width, context.canvas.height); // Clears the canvas
