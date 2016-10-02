@@ -28,8 +28,11 @@ function setDate(){
 webSocket.onmessage = function(message) {
       var data = JSON.parse(message.data)
       if (date_check !== data.message.date){
-      $('<div class="message new"><figure class="avatar"><img src="/static/images/anon.png" /></figure>' + data.message.text+ '</div>').appendTo($('.mCSB_container')).addClass('new');
-      updateScrollbar();
+          $('<div class="message new"><figure class="avatar"><img src="/static/images/anon.png" /></figure>' + data.message.text+ '</div>').appendTo($('.mCSB_container')).addClass('new');
+          updateScrollbar();
+          if ($('.spoiler_links').parent().children('div.spoiler_body').css("display") == "none"){
+              $('.spoiler_links').parent().children('div.spoiler_body').toggle('normal');
+          }
       }
   }
 function insertMessage() {

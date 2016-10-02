@@ -70,7 +70,7 @@
                         {% endblock %}
 
 					</div>
-
+               <div id="hidebutton" class="fa fa-share" style="-webkit-transform: rotate(90deg); transform: rotate(90deg);cursor: pointer; position: fixed; top: 50%; left: -1%"  onclick="return hideChat()"> Скрыть</div>
 				<!-- Sidebar -->
 					<section id="sidebar">
 						<!-- Intro -->
@@ -90,9 +90,10 @@
 							</section>
                         {% endblock %}
 						<!-- Mini Posts -->
-                        <div>
-                    <div class="spoiler_links"><center><h2>АНОНИМНЫЙ ЧАТИК</h2></center></div>
-                    <div class="spoiler_body"><center><section id="chat">{% include 'chat.html' %}</section></center></div>
+
+                        <div style="margin: -20px;padding-top: 29px" class="chatbody" >
+                            <div class="spoiler_links"><center><h2>АНОНИМНЫЙ ЧАТИК</h2></center></div>
+                            <div class="spoiler_body"><center><section id="chat">{% include 'chat.html' %}</section></center></div>
                         </div>
 						<!-- Posts List -->
 							{% include 'users_section.html' %}
@@ -159,9 +160,22 @@
                 </style>
 
                 <script type="text/javascript">
+                    var flagHideMenu;
+                    function hideChat() {
+
+                        if (flagHideMenu !== true){
+                            $('#hidebutton').text('Показать');
+                            flagHideMenu = true;
+                        }
+                        else {$('#hidebutton').text('Скрыть');
+                            flagHideMenu = false;
+                        }
+                        $('#sidebar').toggle();
+                        return false;
+                    }
                     function hideSideMenu() {
                         $('#sidebar').hide()
-                    }
+                    }   /// добавить btn
                     var flag;
                     function popup_avatar() {
                         var av = $('#avatar');

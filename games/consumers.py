@@ -27,7 +27,6 @@ def ws_message(message):
         'text': json.dumps({
             'message': data,
             'sender': message.reply_channel.name,
-
     })}),
 
 
