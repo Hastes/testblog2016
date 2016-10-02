@@ -1,5 +1,7 @@
 
-
+#sidebar p{
+  margin-bottom: 2em;
+}
 input {
   display: inline-block;
   background: #8f7a66;
