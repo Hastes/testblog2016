@@ -23,7 +23,7 @@ PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 SECRET_KEY = 'r-$*m)zk3c-tjenrucg0p!6end1ez7x0uv$o!cz3ww7m#)8=p&'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ADMINS = [('Roman', 'rom541997@gmail.com')]
 
