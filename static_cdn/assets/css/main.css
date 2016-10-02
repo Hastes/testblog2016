@@ -2196,6 +2196,12 @@
 		margin: 0 0 2em 0;
 		padding-left: 1em;
 	}
+	.infoMovies ul{
+		list-style: disc;
+		margin: 0 0 0em 0;
+		opacity: 0.81;
+		padding-left: 1em;
+	}
 
 		ul li {
 			padding-left: 0.5em;
@@ -2730,7 +2736,7 @@
 					}
 
 						.post > footer .stats li .icon:before {
-							color: rgba(160, 160, 160, 0.3);
+							color: rgba(29, 29, 29, 0.3);
 							margin-right: 0.75em;
 						}
 
@@ -3323,8 +3329,9 @@
 	#intro header h2 {
     overflow: hidden; /* Обрезаем содержимое */
     padding: 5px; /* Поля */
+	padding-left: 0px;
 	font-weight: 100;
-	font-size: 2em;
+	/*font-size: 1.5em;*/
     position: relative; /* Относительное позиционирование */
 		transition: 3s;
    }
