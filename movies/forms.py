@@ -7,3 +7,11 @@ class AddCommentForMovie(forms.ModelForm):
         fields = [
             'text'
         ]
+
+class AddMovie(forms.ModelForm):
+    class Meta:
+        model = MoviesBlog
+        fields = [
+            'youtube_key',
+            'tags'
+        ]

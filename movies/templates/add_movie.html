@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <form method="POST">{% csrf_token %}
+        {% for fields in form_movie %}
+            {{ fields.errors }}
+            {% if forloop.counter == 1 %}
+            <b>{{ fields.label}}</b><div class="fieldmovie">{{ fields }}</div>
+            {% else %}
+                <b>{{ fields.label}}</b><div>{{ fields }}</div>
+            {% endif %}
+            <p>{{ fields.help_text }}</p>
+        {% endfor %}
+        <p><input type="submit" value="Опубликовать"></p>
+    </form>
+    <style>
+    .fieldmovie{
+        width: 30%;
+    }
+    </style>
+    <script>$(document).ready(function () {
+        $('#id_youtube_key').attr({minlength:"11"})
+    })</script>
+{% endblock content %}

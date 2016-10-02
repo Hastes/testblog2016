@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>Sugesstions</title>
+    <style> p {
+        margin-left: 10px;
+    }
+    .message{
+        color: #1b95e0;
+    }</style>
+</head>
+<body>
+{% for sugesstion in suggesstions %}
+    {% if forloop.last %}
+        Count of suggesstions: {{ forloop.counter }}
+    {% endif %}
+{% endfor %}
+{% for sugesstion in suggesstions %}
+    <p class="message">{{ sugesstion.message_admin }}</p>
+    <p>{{ sugesstion.date_message_admin}}</p>
+    <hr>
+{% endfor %}
+</body>
+</html>

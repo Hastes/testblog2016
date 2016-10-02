@@ -71,7 +71,7 @@
 {% endblock %}
 
 {% block pagination %}
-    <ul class="actions pagination">
+    <ul id="pagin" class="actions pagination">
         {% if objects.has_other_pages %}
             {% if objects.has_previous %}
                 <li><a href="{% url 'current_page' objects.previous_page_number %}" class="button big previous">Previous
@@ -88,4 +88,8 @@
         {% else %}
         {% endif %}
     </ul>
+
+    <style> #pagin {
+        text-align: center;
+    } </style>
 {% endblock %}

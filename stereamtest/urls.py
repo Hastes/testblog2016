@@ -56,6 +56,7 @@ urlpatterns = [
     url(r'^google2cacf60209395090.html/$', TemplateView.as_view(template_name='google2cacf60209395090.html')),
     url(r'^movies/', include("movies.urls"), name="movies"),
     url(r'^trash/', include("trash.urls"), name="trash"),
+    url(r'^suggestions/$',views.suggestions, name='suggestions'),
 ]
 import os
 from django.conf.urls.static import static

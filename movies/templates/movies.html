@@ -1,6 +1,5 @@
 {% extends 'base.html' %}
 
-
 {% block content %}
     {% if slug %}
         Результаты по тегу - #{{ slug }}, <a href="{% url 'listMovies' %}">показать все результаты </a>
@@ -27,7 +26,7 @@
                             src="{{ move.user.user_prof.avatar }}" alt=""/></a></div>
             </footer>
             <h4 id="listHead" class="listHead{{ move.id }}">Комментарии </h4>
-            <ul class="list">
+            <ul id="list_id{{ move.id }}" class="list">
                 {% for comment in move.comments_movies.all|slice:":10" %}
                     {% if forloop.counter == 10 %}
                         <script> $(document).ready(function (){
@@ -50,10 +49,8 @@
     {% endfor %}
 
     <script type="application/javascript">
-        var token = '{{ csrf_token }}'
-        var currentUsername = '{{ request.user }}'
-
-
+        var token = '{{ csrf_token }}';
+        var currentUsername = '{{ request.user }}';
 
         function sendMessageForMovie(idMovie) {
             var message = document.getElementById('message'+idMovie);
@@ -65,7 +62,7 @@
                     movie_id: idMovie
                 },
                 success: function () {
-                    $('.list').prepend('<li><b>'+currentUsername+'</b>' +
+                    $('#list_id'+idMovie).prepend('<li><b>'+currentUsername+'</b>' +
                             '<div style="float: right; margin-left: auto">0 минут назад</div></li>' +
                             '<li>'+message.value+'</li><hr>')
                     message.value = '';
@@ -128,4 +125,30 @@
         }
     </style>
 {% endblock content %}
+
+
+
+{% block pagination %}
+    <ul id="pagin" class="actions pagination">
+        {% if movies.has_other_pages %}
+            {% if movies.has_previous %}
+                <li><a href="{% url 'current_listMovies' movies.previous_page_number %}" class="button big previous">Previous
+                    Page</a></li>
+            {% else %}
+                <li><a href="" class="disabled button big previous">Previous Page</a></li>
+            {% endif %}
+            {% if movies.has_next %}
+                <li><a href="{% url 'current_listMovies' movies.next_page_number %}" class="button big next">Next Page</a>
+                </li>
+            {% else %}
+                <li><a href="" class="disabled button big next">Next Page</a></li>
+            {% endif %}
+        {% else %}
+        {% endif %}
+    </ul>
+
+    <style> #pagin {
+        text-align: center;
+    } </style>
+{% endblock pagination %}
 

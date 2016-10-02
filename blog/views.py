@@ -301,6 +301,10 @@ def sendmessageforadmin(request):
     return HttpResponse()
 
 
+def suggestions(request):
+    return render_to_response('suggestions.html',{'suggesstions':MessageForAdmin.objects.all()})
+
+
 def english_met(request):
     return render(request, 'english.html', {'eng': English.objects.all()})
 

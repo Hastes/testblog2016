@@ -1,14 +1,19 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from movies.models import MoviesBlog,CommentForMoveis
 from taggit.models import Tag
+from movies.forms import AddMovie
 from blog.models import Likes, get_count_likes, get_count_dislikes
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ObjectDoesNotExist
+from django.core.paginator import Paginator,Page
 import json
 
 CONTENT_TYPE = ContentType.objects.get_for_model(MoviesBlog)
-def listMovies(request):
+PER_PAGE = 3
+
+def listMovies(request,page = 1):
+    current_page  = Paginator(MoviesBlog.objects.all(),PER_PAGE)
     if request.POST:
         author = request.user
         movie_id = request.POST["movie_id"]
@@ -23,9 +28,8 @@ def listMovies(request):
         except ValueError:
             return HttpResponse("Длина сообщения должна быть не менее 1-го символа")
 
-    moviesObj = MoviesBlog.objects.all()
     tags = Tag.objects.all()
-    return render(request, 'movies.html', {'movies':moviesObj, 'alltags':tags} )
+    return render(request, 'movies.html', {'movies':current_page.page(page), 'alltags':tags} )
 
 def listForTags(request,slug):
     return render(request,'movies.html',{'slug':slug, 'movies':MoviesBlog.objects.filter(tags__name__in = [slug])})
@@ -56,4 +60,13 @@ def like(request,inf,id):
                                     'like':count_likes}), content_type="application/json")
 
 
-
+def addmovie(request):
+    if request.user.is_staff or request.user.is_superuser:
+        form = AddMovie(request.POST or None)
+        if form.is_valid():
+            obj = form.save(commit=False)
+            obj.user = request.user
+            obj.save()
+            form.save_m2m()
+            return HttpResponseRedirect('/movies/')
+    return render(request,'add_movie.html',{'form_movie':form})
