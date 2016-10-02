@@ -35,12 +35,12 @@ CHANNEL_LAYERS = {
         "ROUTING": "stereamtest.routing.channel_routing",
     },
 }
-
 # Application definition
 LIBRALES_APPS = [
     'rest_framework',
     'pyuploadcare.dj',
     'channels',
+    'taggit',
 ]
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -51,6 +51,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'blog',
     'games',
+    'trash',
+    'movies',
     'chat',
 ] + LIBRALES_APPS
 
@@ -81,6 +83,9 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+
+                # appended custom value
+                "blog.template_tags.quotelist",
             ],
         },
     },

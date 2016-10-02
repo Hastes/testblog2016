@@ -77,7 +77,7 @@
     }
     webSocket.onclose = function () {
             webSocket = new WebSocket('ws://' + window.location.host + '/painters/index');
-    }
+    };
     function redraw() {
         context.clearRect(0, 0, context.canvas.width, context.canvas.height); // Clears the canvas
 

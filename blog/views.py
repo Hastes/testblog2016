@@ -1,7 +1,6 @@
 from django.shortcuts import render, get_object_or_404, render_to_response
 from django.http import HttpResponse, HttpResponseRedirect, HttpRequest
-from .models import Post, Comment, Offtop_Comment, Likes, UserProf, English, NewsProfile, ImagePostPicture, \
-    MessageForAdmin
+from .models import Post, Comment, Offtop_Comment, Likes, UserProf, English, NewsProfile, ImagePostPicture, MessageForAdmin
 from django.core.paginator import Paginator
 from ipware.ip import get_ip
 from  django.contrib.auth.forms import UserCreationForm, AuthenticationForm
@@ -18,8 +17,7 @@ from django.db import IntegrityError
 from django.utils.text import slugify
 from blog.API.serializers import Offtop_CommentSerializer, UserProfSerializer, EngilshSerializer
 import json
-from blog.forms import CreatePostForm, AddCommentForPost, AddNewsProfile, ImagePostPictureForm, UserSettingsForm, \
-    UserCreateForm
+from blog.forms import CreatePostForm, AddCommentForPost, AddNewsProfile, ImagePostPictureForm, UserSettingsForm, UserCreateForm
 from django.http import JsonResponse
 
 # Create your views here.
@@ -312,4 +310,4 @@ def testpage(request):
 
 
 def testpage2(request):
-    render_to_response('test.html', {})
+    return render_to_response('test.html', {})

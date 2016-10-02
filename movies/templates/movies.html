@@ -1,0 +1,131 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+    {% if slug %}
+        Результаты по тегу - #{{ slug }}, <a href="{% url 'listMovies' %}">показать все результаты </a>
+    {% endif %}
+    {% for move in movies %}
+        <article class="post">
+            <header>
+                <div style="padding: 2px; margin: auto; font-family: Raleway;" class="tags">
+                    {% for tag in move.tags.all %}<a href="{% url 'urltags' tag %}"> #{{ tag }} </a>{% endfor %} </div>
+            </header>
+            <iframe allowfullscreen="" frameborder="0" height="468"
+                    src="https://www.youtube.com/embed/{{ move.youtube_key }}" width="100%"></iframe>
+            <footer class="infoMovies{{ move.id }}">
+                <ul class="stats">
+                    <li><a id="like_id{{ move.id }}" onclick="note({{ move.id }},'true')"
+                           class="icon fa-thumbs-o-up">{{ move.get_count_lk }}</a></li>
+                    <li><a id="dislike_id{{ move.id }}" onclick="note({{ move.id }},'false')"
+                           class="icon fa-thumbs-o-down">{{ move.get_count_dislikes }}</a></li>
+                    <li><a href="" onclick="return openComments({{ move.id }})" id="comments_id"
+                           class="icon fa-comment">{{ move.get_count_comments }}</a></li>
+                </ul>
+                <div style="margin-left: auto;" class="infoPublish">{{ move.date|timesince }} назад
+                    <a href="" class="author"><span class="name">{{ move.user }}</span><img
+                            src="{{ move.user.user_prof.avatar }}" alt=""/></a></div>
+            </footer>
+            <h4 id="listHead" class="listHead{{ move.id }}">Комментарии </h4>
+            <ul class="list">
+                {% for comment in move.comments_movies.all|slice:":10" %}
+                    {% if forloop.counter == 10 %}
+                        <script> $(document).ready(function (){
+                            $('.listHead'+'{{ move.id }}').html('Комментарии (Показаны 10 последних)')
+                        }) </script>
+                    {% endif %}
+                <li><b>{{ comment.user }}</b><div style="float: right; margin-left: auto">{{ comment.date|timesince }} назад</div></li>
+                <li>{{ comment.text }}</li>
+                    <hr>
+                {% endfor %}
+            <a class="addCommentForMovie_link{{ move.id }}" href="" onclick="return showformforCommentMovie(this.className)">Добавить комментарий</a>
+            <div class="addCommentForMovie">
+             <form onsubmit="return sendMessageForMovie({{ move.id }})">
+               <div style="padding-bottom: 5px"><textarea id="message{{ move.id }}" placeholder="Кто будет комментировать это дерьмо, если не я?" style="resize: vertical" height="100px" type="text"></textarea></div>
+               <div><input type="submit"></div>
+            </form>
+                </div>
+            </ul>
+        </article>
+    {% endfor %}
+
+    <script type="application/javascript">
+        var token = '{{ csrf_token }}'
+        var currentUsername = '{{ request.user }}'
+
+
+
+        function sendMessageForMovie(idMovie) {
+            var message = document.getElementById('message'+idMovie);
+            $.ajax({
+                type: "POST",
+                data: {
+                    text: message.value,
+                    csrfmiddlewaretoken: token,
+                    movie_id: idMovie
+                },
+                success: function () {
+                    $('.list').prepend('<li><b>'+currentUsername+'</b>' +
+                            '<div style="float: right; margin-left: auto">0 минут назад</div></li>' +
+                            '<li>'+message.value+'</li><hr>')
+                    message.value = '';
+                    $('html, body').animate({scrollTop: $('.infoMovies' + idMovie).offset().top}, 500);
+                }
+            });
+            return false;
+        }
+        
+        function showformforCommentMovie(idMove){
+            $('.'+idMove).siblings('.addCommentForMovie').slideToggle(300);
+            return false;
+        }
+        function openComments(idMove) {
+            $('.infoMovies' + idMove).siblings('.list').slideToggle(300);
+            $('.infoMovies' + idMove).siblings('.listHead'+idMove).slideToggle(300);
+            $('.icon').css({color: '#2ebaae;'});
+            return false;
+        }
+        function note(idMove,inf) {
+            var obj = document.getElementById('like_id' + idMove);
+            obj.style.cssText = "pointer-events: none;";
+            var objQ;  // элемент jquery
+            if (inf === 'true'){
+                objQ = $('#like_id' + idMove);
+                objQ.fadeOut();
+                }
+            if (inf === 'false'){
+                objQ = $('#dislike_id' + idMove);
+                objQ.fadeOut();
+            }
+            $.ajax({
+                url: '/movies/like/' +inf +'/'+idMove,
+                success: function (data) {
+                    if (data === '') {
+                        window.location.href = "{% url 'reg' %}"
+                    }
+                    console.log(data);
+                    $("#dislike_id" + idMove).html(data.dislike);
+                    $("#like_id" + idMove).html(data.like);
+                    obj.style.cssText = "pointer-events: auto ";
+                    objQ.fadeIn()
+                }
+            })
+        }
+
+    </script>
+    <style>
+        .addCommentForMovie{
+            display: none;
+        }
+        .list {
+            display: none;
+            list-style-type: none;
+            margin: 10px;
+            overflow: hidden;
+        }
+        #listHead{
+            display: none;
+        }
+    </style>
+{% endblock content %}
+

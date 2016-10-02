@@ -14,7 +14,11 @@ def upload_url(post, nameimage):
 def upload_url_for_user(user,nameimage):
     return 'userprofile\%s\%s' % (user.user_key.username,nameimage)
 def get_count_likes(id,model):
-    return Likes.objects.filter(content_type=ContentType.objects.get_for_model(model),object_id=id).count()
+    return Likes.objects.filter(content_type=ContentType.objects.get_for_model(model),object_id=id,like=True).count()
+
+def get_count_dislikes(id,model):
+    return Likes.objects.filter(content_type=ContentType.objects.get_for_model(model),object_id=id,like=False).count()
+
 def get_count_comment(id):
     return Comment.objects.filter(comment_post=id).count()
 
@@ -30,12 +34,14 @@ def get_count_comment(id):
 #     heigth_field = models.IntegerField(null=True,default=0)
 
 
+
+
 class Post(models.Model):
     author = models.ForeignKey(settings.AUTH_USER_MODEL, default=1)
-    title = models.CharField(max_length=20, verbose_name='Заголовок')
+    title = models.CharField(max_length=30, verbose_name='Заголовок')
     about = models.CharField(max_length=40, verbose_name='Описание')
     message = models.TextField(verbose_name='Текст')
-    likes_post = models.IntegerField(default=0)
+#    likes_post = models.IntegerField(default=0)
     # image = models.ImageField(null=True,
     #                           blank=True,
     #                           upload_to=upload_url,
@@ -44,7 +50,7 @@ class Post(models.Model):
     #                           height_field="heigth_field",
     #                           )
     # width_field = models.IntegerField(null=True,default=0)
-    heigth_field = models.IntegerField(null=True,default=0)
+ #   heigth_field = models.IntegerField(null=True,default=0)
     created_date = models.DateTimeField(default=timezone.now)
     def get_count_lk(self):
         return get_count_likes(self.id,Post)
@@ -89,7 +95,7 @@ class Offtop_Comment(models.Model):
         ordering = ['-created_date']
 
 class Likes(models.Model):
-    like = models.BooleanField(default=False)
+    like = models.BooleanField(default=False,blank = True)
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
     user_id = models.PositiveIntegerField()
     object_id = models.PositiveIntegerField()
@@ -153,6 +159,13 @@ class MessageForAdmin(models.Model):
     def __str__(self):
         return self.message_admin
 
+class QuotesTitle(models.Model):
+    quotes = models.CharField(max_length=300)
+
+    def __unicode__(self):
+        return self.quotes
+    def __str__(self):
+        return self.quotes
 
 
 #User._meta.get_field('username').max_length = 11

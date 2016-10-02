@@ -1,17 +1,14 @@
 
 var webSocket = new WebSocket('ws://' + window.location.host + '/chat/index');
-var date_check = ""
+var date_check = "";
 
 var $messages = $('.messages-content'),
     d, h, m,
     i = 0;
 
-// $(window).load(function() {
-//   $messages.mCustomScrollbar();
-//   setTimeout(function() {
-//     fakeMessage();
-//   }, 100);
-// });
+$(window).load(function() {
+  $messages.mCustomScrollbar();
+});
 
 function updateScrollbar() {
   $messages.mCustomScrollbar("update").mCustomScrollbar('scrollTo', 'bottom', {
@@ -31,12 +28,12 @@ function setDate(){
 webSocket.onmessage = function(message) {
       var data = JSON.parse(message.data)
       if (date_check !== data.message.date){
-      $('<div class="message new"><figure class="avatar"><img src="http://s3-us-west-2.amazonaws.com/s.cdpn.io/156381/profile/profile-80_4.jpg" /></figure>' + data.message.text+ '</div>').appendTo($('.mCSB_container')).addClass('new');
+      $('<div class="message new"><figure class="avatar"><img src="/static/images/anon.png" /></figure>' + data.message.text+ '</div>').appendTo($('.mCSB_container')).addClass('new');
       updateScrollbar();
       }
   }
 function insertMessage() {
-    msg = $('.message-input').val();
+    var msg = $('.message-input').val();
     date_check = Date.now();
     var obj = {
         type: "message",

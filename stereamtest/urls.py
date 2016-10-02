@@ -21,6 +21,7 @@ from django.views.generic.base import TemplateView
 
 admin.site.site_header = "2K16 | Как ты сюда попал?"
 
+from . import settings
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^$', views.front, name='posts'),
@@ -52,10 +53,10 @@ urlpatterns = [
     url(r'^alertpost/$', pusher.message, name="alertpost"),
     url(r'^chats/$', front_chat, name="chat"),
     url(r'^sendmessageforadmin/$', views.sendmessageforadmin, name='messageforadmin'),
-    url(r'^google2cacf60209395090.html/$', TemplateView.as_view(template_name='google2cacf60209395090.html'),
-        name='indexingGoogle')
+    url(r'^google2cacf60209395090.html/$', TemplateView.as_view(template_name='google2cacf60209395090.html')),
+    url(r'^movies/', include("movies.urls"), name="movies"),
+    url(r'^trash/', include("trash.urls"), name="trash"),
 ]
-from . import settings
 import os
 from django.conf.urls.static import static
 

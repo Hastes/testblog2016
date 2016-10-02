@@ -3,7 +3,7 @@ from .models import (Post, Comment,
                      Offtop_Comment,
                      Likes, UserProf,
                      English, NewsProfile,
-                     MessageForAdmin,
+                     MessageForAdmin,QuotesTitle,
                      ImagePostPicture)
 
 
@@ -32,3 +32,4 @@ admin.site.register(English)
 admin.site.register(NewsProfile)
 admin.site.register(MessageForAdmin, MessagesForAdminCustom)
 admin.site.register(ImagePostPicture)
+admin.site.register(QuotesTitle)

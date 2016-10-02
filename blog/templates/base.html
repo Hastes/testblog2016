@@ -31,6 +31,7 @@
 						<nav class="links">
 							<ul>
 								<li><a href="{% url 'offtop' %}">ОФФТОП</a></li>
+								<li><a href="{% url 'listMovies' %}">TOP MOVIES</a></li>
                                 <li><a href="{% url 'english_met' %}">Английский</a></li>
                                 <li><a href="{% url '2048' %}">2048 Game</a></li>
 							</ul>
@@ -72,7 +73,6 @@
 
 				<!-- Sidebar -->
 					<section id="sidebar">
-
 						<!-- Intro -->
                         {% block myprof %}
 							<section id="intro">
@@ -80,11 +80,10 @@
 								<a href="" class="logo"><img onclick="return popup_avatar()" id="avatar" src="/static/images/av_undef.png" alt="" /></a>
                                 {% endif %}
 								<header>
-									<h2>Добро пожаловать</h2>
+									<h2>{{ quotesTitlerandom }}</h2>
                                     {% if request.user.is_authenticated %}
 									<p>Ссылка на ваш профиль: <a href="{% url 'userprofile'  request.user.username %}">{{ request.user.username }}</a></p>
                                     {% else %}
-                                        <p><a href="{% url 'reg' %}">Зарегистрироваться</a></p>
                                     {% endif %}
                                     <p><div id="header_check_activ" style="color:red"></div></p>
 								</header>
@@ -148,7 +147,6 @@
 								</ul>
 								<p class="copyright">&copy; Untitled. Design: <a href="http://html5up.net">HTML5 UP</a>. Images: <a href="http://unsplash.com">Unsplash</a>.</p>
 							</section>
-
 					</section>
 
 			</div>
@@ -161,6 +159,9 @@
                 </style>
 
                 <script type="text/javascript">
+                    function hideSideMenu() {
+                        $('#sidebar').hide()/// добавить btn
+                    }
                     var flag;
                     function popup_avatar() {
                         var av = $('#avatar');
