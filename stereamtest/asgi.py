@@ -7,4 +7,4 @@ channel_layer = channels.asgi.get_channel_layer()
 
 from whitenoise.django import DjangoWhiteNoise
 
-application = DjangoWhiteNoise(channel_layer)
+channel_layer = DjangoWhiteNoise(channel_layer)
